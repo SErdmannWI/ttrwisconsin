@@ -20,9 +20,7 @@ public class TestService {
     }
 
     public List<TestRecord> getAllTests() {
-        List<TestRecord> testRecords = new ArrayList<>();
-        testRecords.addAll(testRepository.findAll());
-        return testRecords;
+        return testRepository.findAll();
     }
 
     public TestRecord getTestModelById(String id) {
