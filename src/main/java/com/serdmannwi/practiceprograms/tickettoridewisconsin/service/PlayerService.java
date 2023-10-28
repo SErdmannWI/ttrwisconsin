@@ -3,6 +3,7 @@ package com.serdmannwi.practiceprograms.tickettoridewisconsin.service;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.NewPlayerRequest;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.PlayerResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.UpdatePlayerRequest;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.MaxPlayersException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,13 @@ public class PlayerService {
      * @param playerRequest
      * @return
      */
-    public PlayerRecord createNewPlayer(NewPlayerRequest playerRequest) {
-        String newPlayerId = generatePlayerId();
+    public PlayerRecord createNewPlayer(NewPlayerRequest playerRequest) throws MaxPlayersException {
+        String newPlayerId = "";
+        try {
+            newPlayerId = generatePlayerId();
+        } catch (IllegalStateException e) {
+            throw new MaxPlayersException("The maximum number of players (4) has been reached.");
+        }
         PlayerRecord newPlayerRecord = new PlayerRecord(newPlayerId, playerRequest.getPlayerName(), playerRequest.getPlayerIconId(),
             playerRequest.getPlayerColorId());
 

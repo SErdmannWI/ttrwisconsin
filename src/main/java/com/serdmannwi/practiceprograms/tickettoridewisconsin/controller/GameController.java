@@ -1,10 +1,9 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.GameService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +33,16 @@ public class GameController {
     @GetMapping("/nextTurn")
     public ResponseEntity<List<Integer>> nextTurn() {
         return ResponseEntity.ok(gameService.incrementTurn());
+    }
+
+    @GetMapping("/economyRoll")
+    public ResponseEntity<List<Integer>> getEconomyRoll() {
+        return ResponseEntity.ok(gameService.economyRoll());
+    }
+
+    @PostMapping("/setNumPlayers/{numberOfPlayers}")
+    public ResponseEntity<Integer> setNumPlayers (@PathVariable("numberOfPlayers") String playerNumber) {
+        Integer numPlayers = Integer.parseInt(playerNumber);
+        return ResponseEntity.ok(gameService.setNumPlayers(numPlayers));
     }
 }

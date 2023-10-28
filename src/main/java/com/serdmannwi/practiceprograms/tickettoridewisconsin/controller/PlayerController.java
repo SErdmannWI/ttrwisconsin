@@ -3,8 +3,12 @@ package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.NewPlayerRequest;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.PlayerResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.UpdatePlayerRequest;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.MaxPlayersException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.PlayerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,10 +49,17 @@ public class PlayerController {
     }
 
     @PostMapping("/newPlayer")
-    public ResponseEntity<PlayerResponse> createNewPlayer(@RequestBody NewPlayerRequest playerRequest) {
-        PlayerRecord newPlayerRecord = playerService.createNewPlayer(playerRequest);
+    public ResponseEntity<?> createNewPlayer(@RequestBody NewPlayerRequest playerRequest) {
+        PlayerRecord newPlayerRecord;
+        try {
+            newPlayerRecord = playerService.createNewPlayer(playerRequest);
+        } catch (MaxPlayersException e) {
+            ErrorResponse errorResponse = new ErrorResponse(400, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+        }
         if (newPlayerRecord == null) {
-            return ResponseEntity.badRequest().build();
+            ErrorResponse errorResponse = new ErrorResponse(400, "Unknown error took place while attempting to create a new Player.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
         }
 
         return ResponseEntity.ok(recordToResponse(newPlayerRecord));

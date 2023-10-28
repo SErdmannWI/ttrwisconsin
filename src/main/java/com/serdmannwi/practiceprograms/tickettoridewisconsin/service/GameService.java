@@ -20,13 +20,12 @@ public class GameService {
     private int totalTurns;
     private int numPlayers;
 
-    @Autowired
-    public GameService(Random random) {
-        this.random = random;
+    public GameService() {
+        this.random = new Random();
         this.round = 1;
         this.turn = 1;
         this.totalTurns = 1;
-        this.numPlayers = 2;
+        this.numPlayers = 3;
     }
 
     /**
@@ -52,18 +51,38 @@ public class GameService {
      * @return List of round, turn, totalTurns
      */
     public List<Integer> incrementTurn() {
+        System.out.println("Turns Before-------------------");
+        System.out.println("Total Turns: " + totalTurns);
+        System.out.println("Round: " + round);
+        System.out.println("Turn: " + turn);
         List<Integer> gameCounter = new ArrayList<>();
-        totalTurns ++;
+        totalTurns++;
 
+        //Start a new round if all players have gone
         if (turn == numPlayers) {
-            gameCounter.add(round ++);
+            round++;
+            gameCounter.add(round);
             gameCounter.add(turn = 1);
+            gameCounter.add(totalTurns);
+
+            System.out.println("Turns After----------------");
+            System.out.println("Round: " + gameCounter.get(0));
+            System.out.println("Turn: " + gameCounter.get(1));
+            System.out.println("Total Turns: " + gameCounter.get(2));
 
             return gameCounter;
         }
 
+        turn++;
+
         gameCounter.add(round);
-        gameCounter.add(turn ++);
+        gameCounter.add(turn);
+        gameCounter.add(totalTurns);
+
+        System.out.println("Turns After----------------");
+        System.out.println("Round: " + gameCounter.get(0));
+        System.out.println("Turn: " + gameCounter.get(1));
+        System.out.println("Total Turns: " + gameCounter.get(2));
 
         return gameCounter;
     }
