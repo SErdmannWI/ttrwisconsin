@@ -40,11 +40,13 @@ public class City {
         this.economyRoll = economyRoll;
     }
 
-    public List<String> getProductsAvailableJson() {
+    public List<String> getProductsAvailable() {
         return JsonUtil.deserializeFromJson(productsAvailableJson);
     }
 
-    public void setProductsAvailableJson(List<String> productsAvailable) {
+    public String getProductsAvailableJson() { return productsAvailableJson; }
+
+    public void setProductsAvailable(List<String> productsAvailable) {
         this.productsAvailableJson = JsonUtil.serializeToJson(productsAvailable);
     }
 }
