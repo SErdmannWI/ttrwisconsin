@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +16,22 @@ public class City {
     private int economyRoll;
     @Column(columnDefinition = "TEXT")
     private String productsAvailableJson;
+
+    public City() {}
+
+    public City(String cityName, String cityId) {
+        this.name = cityName;
+        this.cityId = cityId;
+        this.economyRoll = 0;
+        this.productsAvailableJson = JsonUtil.serializeToJson(new ArrayList<>());
+    }
+
+    public City(String cityName, String cityId, List<String> cityProdcuts, int economyRoll) {
+        this.name = cityName;
+        this.cityId = cityId;
+        this.productsAvailableJson = JsonUtil.serializeToJson(cityProdcuts);
+        this.economyRoll = economyRoll;
+    }
 
     public String getName() {
         return name;
