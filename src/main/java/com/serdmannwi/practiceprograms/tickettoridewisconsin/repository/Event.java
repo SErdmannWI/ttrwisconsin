@@ -1,6 +1,5 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.utils.EventTypeConverter;
 import jakarta.persistence.*;
 
 @Entity

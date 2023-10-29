@@ -37,6 +37,15 @@ public class EventController {
         return ResponseEntity.ok(allEventResponses);
     }
 
+    @GetMapping("/allActiveEvents")
+    public ResponseEntity<?> getAllActiveEvents() {
+        List<Event> activeEvents = eventService.getAllActiveEvents();
+        if (activeEvents.isEmpty()) {
+            return ResponseEntity.ok().body("No active events");
+        }
+        return ResponseEntity.ok().body(activeEvents);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getEventById(@PathVariable("id") String id) {
         Event event = eventService.getEventById(id);
@@ -54,6 +63,9 @@ public class EventController {
         if (event == null) {
             ErrorResponse errorResponse = new ErrorResponse(404, "Could not find Event with ID: " + id);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+        } else if (event.isActive()) {
+            ErrorResponse errorResponse = new ErrorResponse(400, "Event is already active with ID: " + id);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
         }
 
         Event activatedEvent = eventService.activateEvent(id);
@@ -72,6 +84,9 @@ public class EventController {
         if (event == null) {
             ErrorResponse errorResponse = new ErrorResponse(404, "Could not find Event with ID: " + id);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+        } else if (!event.isActive()) {
+            ErrorResponse errorResponse = new ErrorResponse(400, "Event is already inactive with ID: " + id);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
         }
 
         Event deactivatedEvent = eventService.deactivateEvent(id);

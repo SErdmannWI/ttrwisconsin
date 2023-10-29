@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -20,6 +21,12 @@ public class EventService {
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
+    }
+
+    public List<Event> getAllActiveEvents() {
+        return eventRepository.findAll().stream()
+            .filter(Event::isActive)
+            .collect(Collectors.toList());
     }
 
     public Event getEventById(String id) {
