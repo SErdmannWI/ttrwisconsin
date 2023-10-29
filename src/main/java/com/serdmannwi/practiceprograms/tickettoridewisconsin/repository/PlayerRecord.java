@@ -1,16 +1,29 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.utils.JsonUtil;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Player Record Class
+ * Completed Routes, Freight Contracts and Active Effects are serialized to JSON of List<String> containing IDs
+ */
+
 @Entity
 public class PlayerRecord {
-    private List<String> completedRoutes;
-    private List<String> activeFreightContracts;
-    private List<String> activeEffects;
+    @Column(columnDefinition = "TEXT")
+    private String completedRoutesJson;
+    @Column(columnDefinition = "TEXT")
+    private String activeFreightContractsJson;
+    @Column(columnDefinition = "TEXT")
+    private String activeEffectsJson;
 
     @Id
     private String playerId;
@@ -38,9 +51,9 @@ public class PlayerRecord {
         this.iconId = iconId;
         this.colorId = colorId;
 
-        completedRoutes = new ArrayList<>();
-        activeFreightContracts = new ArrayList<>();
-        activeEffects = new ArrayList<>();
+        completedRoutesJson = JsonUtil.serializeToJson(new ArrayList<>());
+        activeFreightContractsJson = JsonUtil.serializeToJson(new ArrayList<>());
+        activeEffectsJson = JsonUtil.serializeToJson(new ArrayList<>());
 
         ownedFreightStationId = "";
         ownedAbilityId = "";
@@ -51,15 +64,15 @@ public class PlayerRecord {
     }
 
     public List<String> getCompletedRoutes() {
-        return completedRoutes;
+        return JsonUtil.deserializeFromJson(completedRoutesJson);
     }
 
     public List<String> getActiveFreightContracts() {
-        return activeFreightContracts;
+        return JsonUtil.deserializeFromJson(activeFreightContractsJson);
     }
 
     public List<String> getActiveEffects() {
-        return activeEffects;
+        return JsonUtil.deserializeFromJson(activeEffectsJson);
     }
 
     public String getPlayerId() {
@@ -99,15 +112,15 @@ public class PlayerRecord {
     }
 
     public void setCompletedRoutes(List<String> completedRoutes) {
-        this.completedRoutes = completedRoutes;
+        this.completedRoutesJson = JsonUtil.serializeToJson(completedRoutes);
     }
 
     public void setActiveFreightContracts(List<String> activeFreightContracts) {
-        this.activeFreightContracts = activeFreightContracts;
+        this.activeFreightContractsJson = JsonUtil.serializeToJson(activeFreightContracts);
     }
 
     public void setActiveEffects(List<String> activeEffects) {
-        this.activeEffects = activeEffects;
+        this.activeEffectsJson = JsonUtil.serializeToJson(activeEffects);
     }
 
     public void setPlayerId(String playerId) {
