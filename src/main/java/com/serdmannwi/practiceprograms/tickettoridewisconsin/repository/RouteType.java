@@ -1,9 +1,9 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
 
 public enum RouteType {
-    FREIGHT_ROUTE("freightRoute"),
-    HIGH_SPEED_ROUTE("highSpeedRoute"),
-    SPUR_ROUTE("spurRoute");
+    FREIGHT_ROUTE("FREIGHT-"),
+    HIGH_SPEED_ROUTE("SPEED-"),
+    SPUR_ROUTE("SPUR-");
 
     private final String value;
 
