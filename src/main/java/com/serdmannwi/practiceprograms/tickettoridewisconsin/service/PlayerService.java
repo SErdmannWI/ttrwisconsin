@@ -19,6 +19,7 @@ public class PlayerService {
     private final PlayerRepository playerRepository;
 
     private final String[] PLAYER_IDS = {"PL1", "PL2", "PL3", "PL4"};
+    private int numPlayers = 0;
 
 
     @Autowired
@@ -64,6 +65,13 @@ public class PlayerService {
 
         return playerToBeDeleted.get();
     }
+
+    public int setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+        return getNumPlayers();
+    }
+
+    public int getNumPlayers() { return this.numPlayers; }
 
     /**----------------------------------------- Utility Methods -----------------------------------------**/
     private String generatePlayerId() {

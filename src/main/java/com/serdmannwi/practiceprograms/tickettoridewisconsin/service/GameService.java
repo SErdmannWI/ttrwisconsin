@@ -1,5 +1,6 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.service;
 
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.InvalidNumberOfPlayersException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +20,14 @@ public class GameService {
     private int turn;
     private int totalTurns;
     private int numPlayers;
+    private boolean isInitialized = false;
 
     public GameService() {
         this.random = new Random();
         this.round = 1;
         this.turn = 1;
         this.totalTurns = 1;
-        this.numPlayers = 3;
+        this.isInitialized = true;
     }
 
     /**
@@ -40,9 +42,18 @@ public class GameService {
         return diceRoll;
     }
 
-    public int setNumPlayers(int numPlayers) {
-        this.numPlayers = numPlayers;
+    public int setNumPlayers(int numPlayers) throws InvalidNumberOfPlayersException {
+        if (numPlayers >= 2 && numPlayers <= 4) {
+            this.numPlayers = numPlayers;
+        } else {
+            throw new InvalidNumberOfPlayersException("Number of Players must be between 2 and 4.");
+        }
         return this.numPlayers;
+    }
+
+
+    public int getNumPlayers() {
+        return numPlayers;
     }
 
     /**
@@ -51,10 +62,6 @@ public class GameService {
      * @return List of round, turn, totalTurns
      */
     public List<Integer> incrementTurn() {
-        System.out.println("Turns Before-------------------");
-        System.out.println("Total Turns: " + totalTurns);
-        System.out.println("Round: " + round);
-        System.out.println("Turn: " + turn);
         List<Integer> gameCounter = new ArrayList<>();
         totalTurns++;
 
@@ -79,11 +86,6 @@ public class GameService {
         gameCounter.add(turn);
         gameCounter.add(totalTurns);
 
-        System.out.println("Turns After----------------");
-        System.out.println("Round: " + gameCounter.get(0));
-        System.out.println("Turn: " + gameCounter.get(1));
-        System.out.println("Total Turns: " + gameCounter.get(2));
-
         return gameCounter;
     }
 
@@ -95,7 +97,5 @@ public class GameService {
         return turn;
     }
 
-    public int getNumPlayers() {
-        return numPlayers;
-    }
+    public boolean isInitialized() { return isInitialized; }
 }

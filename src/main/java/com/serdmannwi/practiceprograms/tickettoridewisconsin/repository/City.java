@@ -8,6 +8,11 @@ import jakarta.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Each City will be created on startup. Each City's products will be randomly determined based on what region
+ * the city is in. For example, a City in region 1 could have either cheese, corn, milk, sausage or beer.
+ * Each City will also receive an economy roll value
+ */
 @Entity
 public class City {
     private String name;

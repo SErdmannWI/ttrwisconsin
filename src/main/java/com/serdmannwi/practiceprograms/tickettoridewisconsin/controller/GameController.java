@@ -1,7 +1,11 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.InvalidNumberOfPlayersException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.GameService;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,8 +45,15 @@ public class GameController {
     }
 
     @PostMapping("/setNumPlayers/{numberOfPlayers}")
-    public ResponseEntity<Integer> setNumPlayers (@PathVariable("numberOfPlayers") String playerNumber) {
+    public ResponseEntity<?> setNumPlayers (@PathVariable("numberOfPlayers") String playerNumber) {
         Integer numPlayers = Integer.parseInt(playerNumber);
-        return ResponseEntity.ok(gameService.setNumPlayers(numPlayers));
+        int setNumPlayers = 0;
+        try {
+            setNumPlayers = gameService.setNumPlayers(numPlayers);
+        } catch (InvalidNumberOfPlayersException e) {
+            ErrorResponse errorResponse = new ErrorResponse(400, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+        }
+        return ResponseEntity.ok(setNumPlayers);
     }
 }

@@ -2,6 +2,7 @@ package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.CityEconomyRequest;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.CityResponse;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.CityInitializationException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.CityService;
@@ -50,20 +51,15 @@ public class CityController {
         return ResponseEntity.ok(recordToResponse(city));
     }
 
-    @PutMapping("/setProducts")
+    @PutMapping("/setAllCityEconomies")
     public ResponseEntity<?> setCityEconomy(@RequestBody CityEconomyRequest cityEconomyRequest) {
-        City city = cityService.getCityById(cityEconomyRequest.getCityId());
-        if (city == null) {
-            ErrorResponse errorResponse = new ErrorResponse(404, "Could not find City with ID: " + cityEconomyRequest.getCityId());
+        try {
+            cityService.initializeCityEconomies();
+        } catch (CityInitializationException e) {
+            ErrorResponse errorResponse = new ErrorResponse(404, e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
         }
-
-        List<String> cityProducts = JsonUtil.deserializeFromJson(cityEconomyRequest.getProductsAvailableJson());
-
-        City updatedCity = cityService.addEconomyInfoToCity(cityEconomyRequest.getCityId(), cityProducts,
-            cityEconomyRequest.getEconomyRoll());
-
-        return ResponseEntity.ok(recordToResponse(updatedCity));
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     /**----------------------------------------- Conversion Methods -----------------------------------------**/
