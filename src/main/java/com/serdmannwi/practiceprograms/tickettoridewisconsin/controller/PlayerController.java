@@ -1,10 +1,12 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.ChooseFreightStationRequest;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.NewPlayerRequest;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.PlayerResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.UpdatePlayerRequest;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.MaxPlayersException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.NoAvailableFreightStationException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.PlayerService;
 import org.springframework.http.HttpStatus;
@@ -80,6 +82,26 @@ public class PlayerController {
         }
 
         return ResponseEntity.ok(recordToResponse(deletedPlayer));
+    }
+
+    @PutMapping("/chooseFreightStation")
+    public ResponseEntity<?> chooseFreightStation(@RequestBody ChooseFreightStationRequest freightStationRequest) {
+        if (playerService.getPlayerById(freightStationRequest.getPlayerId()) == null) {
+            ErrorResponse errorResponse = new ErrorResponse(404, "Player with id: " + freightStationRequest.getPlayerId() +
+                " could not be found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+        }
+        PlayerRecord updatedPlayer;
+
+        try {
+            updatedPlayer = playerService.chooseFreightStation(freightStationRequest.getPlayerId(), freightStationRequest.getRegionId(),
+                freightStationRequest.getFreightStationId());
+        } catch (NoAvailableFreightStationException e) {
+            ErrorResponse errorResponse = new ErrorResponse(400, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+        }
+
+        return ResponseEntity.ok(recordToResponse(updatedPlayer));
     }
 
     /**----------------------------------------- Conversion Methods -----------------------------------------**/
