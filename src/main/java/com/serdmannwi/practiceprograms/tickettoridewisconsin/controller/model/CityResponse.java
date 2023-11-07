@@ -11,6 +11,9 @@ public class CityResponse {
     @JsonProperty("cityId")
     private String cityId;
     @NotNull
+    @JsonProperty("regionId")
+    private int regionId;
+    @NotNull
     @JsonProperty("productsAvailable")
     private String productsAvailableJson;
     @NotNull
@@ -24,6 +27,12 @@ public class CityResponse {
     public void setCityId(String cityId) {
         this.cityId = cityId;
     }
+
+    public void setRegionId(int regionId) {
+        this.regionId = regionId;
+    }
+
+    public int getRegionId() { return regionId; }
 
     public void setProductsAvailableJson(String productsAvailableJson) {
         this.productsAvailableJson = productsAvailableJson;

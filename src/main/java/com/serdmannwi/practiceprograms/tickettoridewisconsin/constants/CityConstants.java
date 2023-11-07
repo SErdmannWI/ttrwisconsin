@@ -1,6 +1,14 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.constants;
 
+import java.util.*;
+
 public class CityConstants {
+
+    /**----------------------------------------------- RegionIDs ----------------------------------------------------**/
+    public static final int REGION_ONE_ID = 1;
+    public static final int REGION_TWO_ID = 2;
+    public static final int REGION_THREE_ID = 3;
+    public static final int REGION_FOUR_ID = 4;
 
     /**--------------------------------------------------- Names ---------------------------------------------------**/
     public static final String APPLETON_NAME = "Appleton";
@@ -73,7 +81,7 @@ public class CityConstants {
     public static final String LA_CROSSE_ID = "LCS";
     public static final String MADISON_ID = "MDN";
     public static final String MANITOWOC_ID = "MWC";
-    public static final String MARINTETTE_ID = "MTE";
+    public static final String MARINETTE_ID = "MTE";
     public static final String MILWAUKEE_ID = "MKE";
     public static final String MINNEAPOLIS_ID = "MSP";
     public static final String OSHKOSH_ID = "OSH";
@@ -99,6 +107,39 @@ public class CityConstants {
     public static final String TEST_CITY_TWO_ID = "TC2";
     public static final String TEST_CITY_THREE_ID = "TC3";
     public static final String TEST_CITY_FOUR_ID = "TC4";
+
+    /**----------------------------------------------- Region Lists -------------------------------------------------**/
+    //NOTE: Hudson and Waupaca not currently used to maintain List size of 10 due to economy roll list size of 10.
+
+    //Southern Wisconsin
+    public static final List<String> REGION_ONE_CITY_IDS = new ArrayList<>(Arrays.asList(BELOIT_ID, CHICAGO_ID,
+        JANESVILLE_ID, JOHNSON_CREEK_ID, KENOSHA_ID, MADISON_ID, MILWAUKEE_ID, PORTAGE_ID, RACINE_ID, ROCKFORD_ID));
+
+    //Fox Valley
+    public static final List<String> REGION_TWO_CITY_IDS = new ArrayList<>(Arrays.asList(APPLETON_ID, BEAVER_DAM_ID,
+        BRILLION_ID, FOND_DU_LAC_ID, GREEN_BAY_ID, MANITOWOC_ID, OSHKOSH_ID, SHEBOYGAN_ID, STURGEON_BAY_ID, WEST_BEND_ID));
+
+    //Mississippi River/ Driftless Area
+    public static final List<String> REGION_THREE_CITY_IDS = new ArrayList<>(Arrays.asList(CityConstants.CHIPPEWA_FALLS_ID,
+        CityConstants.DUBUQUE_ID, CityConstants.EAU_CLAIRE_ID, CityConstants.LA_CROSSE_ID, CityConstants.PLATTEVILLE_ID,
+        CityConstants.ROCHESTER_ID, CityConstants.MINNEAPOLIS_ID, CityConstants.TOMAH_ID, CityConstants.WINONA_ID,
+        CityConstants.WISCONSIN_DELLS_ID));
+
+    //Northern Wisconsin
+    public static final List<String> REGION_FOUR_CITY_IDS = new ArrayList<>(Arrays.asList(CityConstants.ASHLAND_ID,
+        DULUTH_ID, CityConstants.IRON_MOUNTAIN_ID, CityConstants.IRONWOOD_ID, CityConstants.MARINETTE_ID,
+        CityConstants.STEVENS_POINT_ID, CityConstants.SUPERIOR_ID, CityConstants.TOMAHAWK_ID, CityConstants.WAUSAU_ID,
+        WISCONSIN_RAPIDS_ID));
+
+    /**---------------------------------------------- Region Map ---------------------------------------------------**/
+    //Key: Region ID (1, 2, 3 or 4) Value: List of City IDs for that region
+    public static final Map<Integer, List<String>> CITY_MAP = new HashMap<>();
+    static {
+        CITY_MAP.put(REGION_ONE_ID, REGION_ONE_CITY_IDS);
+        CITY_MAP.put(REGION_TWO_ID, REGION_TWO_CITY_IDS);
+        CITY_MAP.put(REGION_THREE_ID, REGION_THREE_CITY_IDS);
+        CITY_MAP.put(REGION_FOUR_ID, REGION_FOUR_CITY_IDS);
+    }
 
     /**-------------------------------------------------Spur Names -------------------------------------------------**/
     //Eau Claire

@@ -9,10 +9,10 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.CityRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Creates a new City Repository on instantiation that will be populated with Cities from CityDataInitializer.
@@ -63,15 +63,14 @@ public class CityService {
     //Possibly, each Region should be a HashMap<Integer, List<String>> where the Region number is the ID.
     //When addEconomyInfoToCity is called, the Key can be used to get the appropriate list of products for each region
     @Transactional
-    public void initializeCityEconomies() {
+    public List<City> initializeCityEconomies() {
+        List<City> updatedCities;
         try {
-            addEconomyInfoToCity(REGION_ONE_CITIES);
-            addEconomyInfoToCity(REGION_TWO_CITIES);
-            addEconomyInfoToCity(REGION_THREE_CITIES);
-            addEconomyInfoToCity(REGION_FOUR_CITIES);
+            updatedCities = addEconomyInfoToCity(CityConstants.CITY_MAP);
         } catch (CityNotFoundException e) {
                 throw new CityInitializationException("Failed to initialize City economy", e);
         }
+        return updatedCities;
     }
 
     public List<City> getAllCities() {
@@ -83,33 +82,59 @@ public class CityService {
     }
 
     /**
-     * For each region list, gets each City from the Repository, gets a new EconomyRoll List and that region's
-     * Product List, randomizes and then assigns it to each City, saving each inside the repository
-     * @param cityIds
-     * @return
+     * Takes in Map<Integer,List<String>> where each key is the region and the List is that region's Cities' IDs
+     * Each
+     * @param cityMap
+     * @return List of Cities from each region
      * @throws CityNotFoundException
      */
     //TODO Refactor so that appropriate product list for each region is called.
-    public List<City> addEconomyInfoToCity(List<String> cityIds) throws CityNotFoundException {
+    public List<City> addEconomyInfoToCity(Map<Integer, List<String>> cityMap) throws CityNotFoundException {
         List<City> updatedCities = new ArrayList<>();
+        List<String> productList = new ArrayList<>();
         City city;
-        List<Integer> economyRolls = GameConstants.economyRollList;
-        Collections.shuffle(economyRolls);
-        Queue<Integer> economyQueue = new LinkedList<>(economyRolls);
+        int regionValue = 0;
 
-        List<String>  productList = new ArrayList<>();
-        productList.addAll(REGION_ONE_PRODUCTS);
-        Collections.shuffle(productList);
-        Queue<String> productQueue = new LinkedList<>(productList);
-        for (String cityId : cityIds) {
-            city = cityRepository.findById(cityId).orElseThrow(() ->
-                new CityNotFoundException("City with ID: " + cityId + " was not found."));
-            city.setProductsAvailable(new ArrayList<>(Arrays.asList()));
-            city.setEconomyRoll(economyQueue.poll());
-            updatedCities.add(city);
+//        updatedCities = cityMap.values().stream()
+//            .flatMap(List::stream)
+//            .map(this::economy)
+//            .collect(Collectors.toList());
+
+        //Iterate through each List in cityMap and update the City in the Repository with the economy info
+        for (Map.Entry<Integer, List<String>> entry : cityMap.entrySet()) {
+            //Get Region's specific products
+            regionValue = entry.getKey();
+            productList = new ArrayList<>(getRegionProducts(regionValue));
+            Collections.shuffle(productList);
+            int productIndex = 0;
+            //Get new Economy Roll List with each region
+            List<Integer> economyRolls = GameConstants.economyRollList;
+            Collections.shuffle(economyRolls);
+            Queue<Integer> economyQueue = new LinkedList<>(economyRolls);
+            for (String cityId : entry.getValue()) {
+                city = cityRepository.findById(cityId).orElseThrow(() ->
+                    new CityNotFoundException("City with ID: " + cityId + " was not found."));
+                city.setProductsAvailable(productList.get(productIndex));
+                city.setEconomyRoll(economyQueue.poll());
+                city = cityRepository.save(city);
+                updatedCities.add(city);
+                productIndex = (productIndex + 1) % productList.size();
+            }
         }
 
         return updatedCities;
+    }
+
+    private List<String> getRegionProducts(int regionId) {
+        List<String> productIds = new ArrayList<>();
+        switch (regionId) {
+            case 1 -> productIds.addAll(ProductConstants.REGION_ONE_PRODUCTS_IDS);
+            case 2 -> productIds.addAll(ProductConstants.REGION_TWO_PRODUCTS_IDS);
+            case 3 -> productIds.addAll(ProductConstants.REGION_THREE_PRODUCTS_IDS);
+            case 4 -> productIds.addAll(ProductConstants.REGION_FOUR_PRODUCTS_IDS);
+            default -> productIds = new ArrayList<>();
+        }
+        return productIds;
     }
 
     public City addEconomyRollToCity(String cityId, int economyRoll) {

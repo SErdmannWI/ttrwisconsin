@@ -1,7 +1,6 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.utils.JsonUtil;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -13,29 +12,24 @@ import java.util.List;
  * the city is in. For example, a City in region 1 could have either cheese, corn, milk, sausage or beer.
  * Each City will also receive an economy roll value
  */
+//TODO- Change products available to only 1?
 @Entity
 public class City {
     private String name;
     @Id
     private String cityId;
+    private int regionId;
     private int economyRoll;
-    @Column(columnDefinition = "TEXT")
-    private String productsAvailableJson;
+    private String productId;
 
     public City() {}
 
-    public City(String cityName, String cityId) {
+    public City(String cityName, String cityId, int regionId) {
         this.name = cityName;
         this.cityId = cityId;
+        this.regionId = regionId;
         this.economyRoll = 0;
-        this.productsAvailableJson = JsonUtil.serializeToJson(new ArrayList<>());
-    }
-
-    public City(String cityName, String cityId, List<String> cityProdcuts, int economyRoll) {
-        this.name = cityName;
-        this.cityId = cityId;
-        this.productsAvailableJson = JsonUtil.serializeToJson(cityProdcuts);
-        this.economyRoll = economyRoll;
+        this.productId = "";
     }
 
     public String getName() {
@@ -54,6 +48,14 @@ public class City {
         this.cityId = cityId;
     }
 
+    public int getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(int regionId) {
+        this.regionId = regionId;
+    }
+
     public int getEconomyRoll() {
         return economyRoll;
     }
@@ -62,13 +64,9 @@ public class City {
         this.economyRoll = economyRoll;
     }
 
-    public List<String> getProductsAvailable() {
-        return JsonUtil.deserializeFromJson(productsAvailableJson);
-    }
+    public String getProductId() { return productId; }
 
-    public String getProductsAvailableJson() { return productsAvailableJson; }
-
-    public void setProductsAvailable(List<String> productsAvailable) {
-        this.productsAvailableJson = JsonUtil.serializeToJson(productsAvailable);
+    public void setProductsAvailable(String productId) {
+        this.productId = productId;
     }
 }

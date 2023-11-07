@@ -6,12 +6,13 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.CityInit
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.CityService;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.utils.JsonUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,8 +35,7 @@ public class CityController {
         }
 
         List<CityResponse> allCityResponses = allCitiesList.stream()
-            .map(this::recordToResponse)
-            .collect(Collectors.toList());
+            .map(this::recordToResponse).toList();
 
         return ResponseEntity.ok().body(allCityResponses);
     }
@@ -52,14 +52,19 @@ public class CityController {
     }
 
     @PutMapping("/setAllCityEconomies")
-    public ResponseEntity<?> setCityEconomy(@RequestBody CityEconomyRequest cityEconomyRequest) {
+    public ResponseEntity<?> setCityEconomy() {
+        List<City> updatedCitiesList = new ArrayList<>();
         try {
-            cityService.initializeCityEconomies();
+            updatedCitiesList = cityService.initializeCityEconomies();
         } catch (CityInitializationException e) {
             ErrorResponse errorResponse = new ErrorResponse(404, e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
         }
-        return ResponseEntity.status(HttpStatus.OK).build();
+        List<CityResponse> updatedCityResponses = updatedCitiesList.stream()
+            .map(this::recordToResponse)
+            .sorted(Comparator.comparing(CityResponse::getRegionId))
+            .toList();
+        return ResponseEntity.status(HttpStatus.OK).body(updatedCityResponses);
     }
 
     /**----------------------------------------- Conversion Methods -----------------------------------------**/
@@ -69,7 +74,8 @@ public class CityController {
         cityResponse.setCityName(city.getName());
         cityResponse.setCityId(city.getCityId());
         cityResponse.setEconomyRoll(city.getEconomyRoll());
-        cityResponse.setProductsAvailableJson(city.getProductsAvailableJson());
+        cityResponse.setProductsAvailableJson(city.getProductId());
+        cityResponse.setRegionId(city.getRegionId());
 
         return cityResponse;
     }
