@@ -7,6 +7,7 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.CityInit
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.CityNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.CityRepository;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.FreightContract;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,33 +24,12 @@ import java.util.stream.Collectors;
 public class CityService {
 
     private final CityRepository cityRepository;
-    private final List<String> REGION_ONE_CITIES;
-    private final List<String> REGION_ONE_PRODUCTS;
-    private final List<String> REGION_TWO_CITIES;
-    private final List<String> REGION_TWO_PRODUCTS;
-    private final List<String> REGION_THREE_CITIES;
-    private final List<String> REGION_THREE_PRODUCTS;
-    private final List<String> REGION_FOUR_CITIES;
-    private final List<String> REGION_FOUR_PRODUCTS;
+    private List<FreightContract> freightContracts;
 
     @Autowired
     public CityService(CityRepository cityRepository) {
         this.cityRepository = cityRepository;
-        this.REGION_ONE_CITIES = new ArrayList<>(Arrays.asList(CityConstants.MADISON_ID, CityConstants.MILWAUKEE_ID));
-        this.REGION_ONE_PRODUCTS = new ArrayList<>(Arrays.asList(ProductConstants.PRODUCT_MACHINERY_ID,
-            ProductConstants.PRODUCT_PAPER_ID));
-
-        this.REGION_TWO_CITIES = new ArrayList<>(Arrays.asList(CityConstants.APPLETON_ID, CityConstants.FOND_DU_LAC_ID));
-        this.REGION_TWO_PRODUCTS = new ArrayList<>(Arrays.asList(ProductConstants.PRODUCT_CHEESE_ID,
-            ProductConstants.PRODUCT_CORN_ID));
-
-        this.REGION_THREE_CITIES = new ArrayList<>(Arrays.asList(CityConstants.EAU_CLAIRE_ID, CityConstants.LA_CROSSE_ID));
-        this.REGION_THREE_PRODUCTS = new ArrayList<>(Arrays.asList(ProductConstants.PRODUCT_CRANBERRIES_ID,
-            ProductConstants.PRODUCT_SAND_ID));
-
-        this.REGION_FOUR_CITIES = new ArrayList<>(Arrays.asList(CityConstants.WAUSAU_ID, CityConstants.DULUTH_ID));
-        this.REGION_FOUR_PRODUCTS = new ArrayList<>(Arrays.asList(ProductConstants.PRODUCT_FORESTRY_ID,
-            ProductConstants.PRODUCT_SAUSAGE_ID));
+        freightContracts = new ArrayList<>();
     }
 
     /**
@@ -149,6 +129,23 @@ public class CityService {
         city.setProductsAvailable("");
 
         return cityRepository.save(city);
+    }
+
+    public List<FreightContract> generateFreightContracts() {
+        List<City> cityList = cityRepository.findAll();
+
+        for (City city : cityList) {
+            if (!city.getProductId().equals("")) {
+                //Adjust how many points each contract gets?
+                freightContracts.add(new FreightContract(city.getProductId(), city.getCityId(), 5));
+            }
+        }
+        Collections.shuffle(freightContracts);
+        return freightContracts;
+    }
+
+    public List<FreightContract> getFreightContracts() {
+        return freightContracts;
     }
 
     /**------------------------------------------------ Helper Methods -----------------------------------------------*/

@@ -7,6 +7,7 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.CityNotF
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.CityService;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.FreightContract;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +67,16 @@ public class CityController {
             .sorted(Comparator.comparing(CityResponse::getRegionId))
             .toList();
         return ResponseEntity.status(HttpStatus.OK).body(updatedCityResponses);
+    }
+
+    @GetMapping("/generateFreightContracts")
+    public ResponseEntity<List<FreightContract>> generateFreightContracts() {
+        return ResponseEntity.ok(cityService.generateFreightContracts());
+    }
+
+    @GetMapping("/getFreightContracts")
+    public ResponseEntity<List<FreightContract>> getFreightContracts() {
+        return ResponseEntity.ok(cityService.getFreightContracts());
     }
 
     /**

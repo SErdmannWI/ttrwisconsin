@@ -120,6 +120,15 @@ public class PlayerService {
         return playerRepository.save(playerRecord);
     }
 
+    /**
+     * Checks that Player exists and that the Ability chosen is available. Adds the ability to the local Map where the
+     * key is the playerID and the Ability is the value. Adds the abilityId to the PlayerRecord and saves to repository.
+     * @param playerId
+     * @param abilityId
+     * @return updated PlayerRecord
+     * @throws AbilityNotFoundException
+     */
+
     public PlayerRecord chooseAbility(String playerId, String abilityId) throws AbilityNotFoundException {
         PlayerRecord playerRecord = playerRepository.findById(playerId).orElse(null);
         if (playerRecord == null) {
