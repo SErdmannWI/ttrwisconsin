@@ -1,9 +1,7 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.ChooseFreightStationRequest;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.NewPlayerRequest;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.PlayerResponse;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.UpdatePlayerRequest;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.*;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.AbilityNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.MaxPlayersException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.NoAvailableFreightStationException;
@@ -97,6 +95,25 @@ public class PlayerController {
             updatedPlayer = playerService.chooseFreightStation(freightStationRequest.getPlayerId(), freightStationRequest.getRegionId(),
                 freightStationRequest.getFreightStationId());
         } catch (NoAvailableFreightStationException e) {
+            ErrorResponse errorResponse = new ErrorResponse(400, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+        }
+
+        return ResponseEntity.ok(recordToResponse(updatedPlayer));
+    }
+
+    @PutMapping("/chooseAbility")
+    public ResponseEntity<?> chooseAbility(@RequestBody ChooseAbilityRequest chooseAbilityRequest) {
+        if (playerService.getPlayerById(chooseAbilityRequest.getPlayerId()) == null) {
+            ErrorResponse errorResponse = new ErrorResponse(404, "Player with id: " + chooseAbilityRequest.getPlayerId() +
+                " could not be found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+        }
+        PlayerRecord updatedPlayer;
+
+        try {
+            updatedPlayer = playerService.chooseAbility(chooseAbilityRequest.getPlayerId(), chooseAbilityRequest.getAbilityId());
+        } catch (AbilityNotFoundException e) {
             ErrorResponse errorResponse = new ErrorResponse(400, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
         }

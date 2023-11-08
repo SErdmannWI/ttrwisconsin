@@ -107,10 +107,13 @@ public class CityService {
             productList = new ArrayList<>(getRegionProducts(regionValue));
             Collections.shuffle(productList);
             int productIndex = 0;
+
             //Get new Economy Roll List with each region
             List<Integer> economyRolls = GameConstants.economyRollList;
             Collections.shuffle(economyRolls);
             Queue<Integer> economyQueue = new LinkedList<>(economyRolls);
+
+            //Iterate through each city ID and set productID and economy roll
             for (String cityId : entry.getValue()) {
                 city = cityRepository.findById(cityId).orElseThrow(() ->
                     new CityNotFoundException("City with ID: " + cityId + " was not found."));
@@ -125,6 +128,30 @@ public class CityService {
         return updatedCities;
     }
 
+    public City addEconomyRollToCity(String cityId, int economyRoll) {
+        Optional<City> cityOptional = cityRepository.findById(cityId);
+        if (cityOptional.isEmpty()) {
+            throw new CityNotFoundException("City with id: " + cityId + " could not be found");
+        }
+        City city = cityOptional.get();
+        city.setEconomyRoll(economyRoll);
+
+        return cityRepository.save(city);
+    }
+
+    public City removeCityProduct(String cityId) {
+        Optional<City> cityOptional = cityRepository.findById(cityId);
+        if (cityOptional.isEmpty()) {
+            throw new CityNotFoundException("City with id: " + cityId + " could not be found");
+        }
+        City city = cityOptional.get();
+        city.setEconomyRoll(0);
+        city.setProductsAvailable("");
+
+        return cityRepository.save(city);
+    }
+
+    /**------------------------------------------------ Helper Methods -----------------------------------------------*/
     private List<String> getRegionProducts(int regionId) {
         List<String> productIds = new ArrayList<>();
         switch (regionId) {
@@ -135,16 +162,5 @@ public class CityService {
             default -> productIds = new ArrayList<>();
         }
         return productIds;
-    }
-
-    public City addEconomyRollToCity(String cityId, int economyRoll) {
-        Optional<City> cityOptional = cityRepository.findById(cityId);
-        if (cityOptional.isEmpty()) {
-            return null;
-        }
-        City city = cityOptional.get();
-        city.setEconomyRoll(economyRoll);
-
-        return cityRepository.save(city);
     }
 }

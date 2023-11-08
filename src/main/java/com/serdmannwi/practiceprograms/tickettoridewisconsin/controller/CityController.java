@@ -3,6 +3,7 @@ package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.CityEconomyRequest;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.CityResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.CityInitializationException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.CityNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.CityService;
@@ -65,6 +66,25 @@ public class CityController {
             .sorted(Comparator.comparing(CityResponse::getRegionId))
             .toList();
         return ResponseEntity.status(HttpStatus.OK).body(updatedCityResponses);
+    }
+
+    /**
+     * Used after a Player has chosen a Freight Station. Removes the Product from the FreightStation's City
+     * and sets economy roll to 0
+     * @param cityId
+     * @return
+     */
+    @PutMapping("/setCityProduct/{cityId}")
+    public ResponseEntity<?> setCityProduct(@PathVariable("cityId") String cityId) {
+        City updatedCity;
+        try {
+            updatedCity = cityService.removeCityProduct(cityId);
+        } catch (CityNotFoundException e) {
+            ErrorResponse errorResponse = new ErrorResponse(404, e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+        }
+
+        return ResponseEntity.ok().body(recordToResponse(updatedCity));
     }
 
     /**----------------------------------------- Conversion Methods -----------------------------------------**/

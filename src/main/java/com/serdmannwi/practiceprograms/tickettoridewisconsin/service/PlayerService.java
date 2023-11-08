@@ -1,12 +1,15 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.service;
 
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.AbilityConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.CityConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.FreightStationConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.NewPlayerRequest;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.AbilityNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.MaxPlayersException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.NoAvailableFreightStationException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRepository;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.Ability;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.FreightStation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ public class PlayerService {
     private final String[] PLAYER_IDS = {"PL1", "PL2", "PL3", "PL4"};
     private Map<Integer, Map<String, FreightStation>> unownedFreightStations;
     private Map<String, FreightStation> ownedFreightStations;
+    private Map<String, Ability> ownedAbilities;
     private int numPlayers = 0;
 
 
@@ -29,7 +33,10 @@ public class PlayerService {
         this.playerRepository = playerRepository;
         this.unownedFreightStations = generateFreightStationMap();
         ownedFreightStations = new HashMap<>();
+        ownedAbilities = new HashMap<>();
     }
+
+    /**------------------------------------------- Player Creation ---------------------------------------------------*/
 
     /**
      * New Players have an ID generated based on number of current Players.
@@ -49,6 +56,8 @@ public class PlayerService {
 
         return playerRepository.save(newPlayerRecord);
     }
+
+    /**---------------------------------------- Database Interactions ------------------------------------------------*/
 
     public PlayerRecord getPlayerById(String id) {
         return playerRepository.findById(id).orElse(null);
@@ -72,12 +81,7 @@ public class PlayerService {
         return playerToBeDeleted.get();
     }
 
-    public int setNumPlayers(int numPlayers) {
-        this.numPlayers = numPlayers;
-        return getNumPlayers();
-    }
-
-    public int getNumPlayers() { return this.numPlayers; }
+    /**------------------------------------------- Player Choices ---------------------------------------------------*/
 
     /**
      * Checks that the Player exists, that the region contains a choose-able FreightStation
@@ -116,6 +120,26 @@ public class PlayerService {
         return playerRepository.save(playerRecord);
     }
 
+    public PlayerRecord chooseAbility(String playerId, String abilityId) throws AbilityNotFoundException {
+        PlayerRecord playerRecord = playerRepository.findById(playerId).orElse(null);
+        if (playerRecord == null) {
+            return null;
+        }
+
+        if (!AbilityConstants.ABILITY_MAP.containsKey(abilityId)) {
+            throw new AbilityNotFoundException("Cannot choose ability with ID: " + abilityId + ".");
+        }
+
+        Ability ability = AbilityConstants.ABILITY_MAP.get(abilityId);
+        Ability chosenAbility = new Ability(ability.getAbilityName(), ability.getAbilityId(), ability.getDescription(),
+            ability.getBonusPoints(), playerId);
+
+        ownedAbilities.put(playerId, chosenAbility);
+        playerRecord.setOwnedAbilityId(abilityId);
+
+        return playerRepository.save(playerRecord);
+    }
+
     /**----------------------------------------- Utility Methods -----------------------------------------**/
     private String generatePlayerId() {
         int numPlayers = playerRepository.findAll().size();
@@ -126,6 +150,13 @@ public class PlayerService {
 
         throw new IllegalStateException("Maximum number of Players reached.");
     }
+
+    public int setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+        return getNumPlayers();
+    }
+
+    public int getNumPlayers() { return this.numPlayers; }
 
     /**
      * Method runs at startup
