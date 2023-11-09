@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
+//TODO Consider refactoring with @ControllerAdvice annotation with a GlobalExceptionHandler
+
 @RestController
 @RequestMapping("/player")
 public class PlayerController {
@@ -92,14 +94,9 @@ public class PlayerController {
     }
 
     @GetMapping("/getPlayer/{id}")
-    public ResponseEntity<?> getPlayerById(@PathVariable("id") String id) {
+    public ResponseEntity<PlayerResponse> getPlayerById(@PathVariable("id") String id) {
         PlayerRecord playerRecord;
-        try {
-            playerRecord = playerService.getPlayerById(id);
-        } catch (PlayerNotFoundException e) {
-            ErrorResponse errorResponse = new ErrorResponse(404, e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
-        }
+        playerRecord = playerService.getPlayerById(id);
 
         return ResponseEntity.ok(recordToResponse(playerRecord));
     }
@@ -162,7 +159,9 @@ public class PlayerController {
         return ResponseEntity.ok().build();
     }
 
-    /**-------------------------------------------- Conversion Methods --------------------------------------------**/
+    /**--------------------------------------------- Exception Handler ---------------------------------------------**/
+
+    /**-------------------------------------------- Conversion Methods ---------------------------------------------**/
     private PlayerResponse recordToResponse(PlayerRecord playerRecord) {
         PlayerResponse playerResponse = new PlayerResponse();
 
