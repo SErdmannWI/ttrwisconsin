@@ -136,7 +136,7 @@ public class CityService {
 
         for (City city : cityList) {
             if (!city.getProductId().equals("")) {
-                //Adjust how many points each contract gets?
+                //TODO Adjust how many points each contract gets?
                 freightContracts.add(new FreightContract(city.getProductId(), city.getCityId(), 5));
             }
         }

@@ -3,10 +3,12 @@ package com.serdmannwi.practiceprograms.tickettoridewisconsin.service;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.AbilityConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.CityConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.FreightStationConstants;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.PlayerConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.NewPlayerRequest;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.AbilityNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.MaxPlayersException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.NoAvailableFreightStationException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.PlayerNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRepository;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.Ability;
@@ -20,8 +22,9 @@ import java.util.*;
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
-
-    private final String[] PLAYER_IDS = {"PL1", "PL2", "PL3", "PL4"};
+    private Deque<String> playerQueue; //Queue of Player IDs in order of turns
+    private List<String> deferredTurns; //Used for if a Player has the Ability to defer turns to next round
+    private String[] playerOrderMaster; //Master order for Player turns
     private Map<Integer, Map<String, FreightStation>> unownedFreightStations;
     private Map<String, FreightStation> ownedFreightStations;
     private Map<String, Ability> ownedAbilities;
@@ -34,6 +37,7 @@ public class PlayerService {
         this.unownedFreightStations = generateFreightStationMap();
         ownedFreightStations = new HashMap<>();
         ownedAbilities = new HashMap<>();
+        deferredTurns = new ArrayList<>();
     }
 
     /**------------------------------------------- Player Creation ---------------------------------------------------*/
@@ -59,7 +63,10 @@ public class PlayerService {
 
     /**---------------------------------------- Database Interactions ------------------------------------------------*/
 
-    public PlayerRecord getPlayerById(String id) {
+    public PlayerRecord getPlayerById(String id) throws PlayerNotFoundException {
+        PlayerRecord playerRecord = playerRepository.findById(id)
+            .orElseThrow(() -> new PlayerNotFoundException("Could not find Player with id: " + id + "."));
+
         return playerRepository.findById(id).orElse(null);
     }
 
@@ -81,6 +88,47 @@ public class PlayerService {
         return playerToBeDeleted.get();
     }
 
+    /**----------------------------------------- Player Turn Manager ------------------------------------------------*/
+    public void createTurnQueue(String[] playerIds) throws PlayerNotFoundException {
+        playerOrderMaster = playerIds;
+        playerQueue = new LinkedList<>();
+        for (String playerId : playerOrderMaster) {
+            getPlayerById(playerId);
+            playerQueue.add(playerId);
+        }
+    }
+
+    public void startNextRound() throws PlayerNotFoundException {
+        for (String playerId : playerOrderMaster) {
+            getPlayerById(playerId);
+            playerQueue.add(playerId);
+        }
+    }
+
+    public PlayerRecord getNextPlayer() throws PlayerNotFoundException {
+        if (playerQueue.isEmpty()) {
+            startNextRound();
+        }
+        String playerId = playerQueue.poll();
+        //Check if deferredTurns contains any Players. If so, check if the current Player matches. If so, add the
+        //Player back into the queue
+        if (!deferredTurns.isEmpty()) {
+            System.out.println("Player ID: " + playerId + "\nDeferred Player: " + deferredTurns.get(0));
+            if (playerId.equals(deferredTurns.get(0))) {
+                playerQueue.addFirst(playerId);
+                deferredTurns.clear();
+                return playerRepository.findById(playerId).orElseThrow(() -> new PlayerNotFoundException
+                    ("Player could not be found with id: " + playerId + "."));
+            }
+        }
+        return playerRepository.findById(playerId).orElseThrow(() -> new PlayerNotFoundException
+            ("Player could not be found with id: " + playerId + "."));
+    }
+
+    public void deferTurn(String currentPlayerId) {
+        deferredTurns.add(currentPlayerId);
+    }
+
     /**------------------------------------------- Player Choices ---------------------------------------------------*/
 
     /**
@@ -93,11 +141,10 @@ public class PlayerService {
      * @return updated PlayerRecord with FreightStationID added
      * @throws NoAvailableFreightStationException
      */
-    public PlayerRecord chooseFreightStation(String playerId, int regionId, String freightStationId) throws NoAvailableFreightStationException {
-        PlayerRecord playerRecord = playerRepository.findById(playerId).orElse(null);
-        if (playerRecord == null) {
-            return null;
-        }
+    public PlayerRecord chooseFreightStation(String playerId, int regionId, String freightStationId)
+        throws NoAvailableFreightStationException, PlayerNotFoundException {
+        PlayerRecord playerRecord = playerRepository.findById(playerId).orElseThrow(() ->
+            new PlayerNotFoundException("Player could not be found with id: " + playerId + "."));
 
         if (!unownedFreightStations.containsKey(regionId)) {
             throw new NoAvailableFreightStationException("Two Players cannot own Freight Stations in the same Region.");
@@ -129,11 +176,9 @@ public class PlayerService {
      * @throws AbilityNotFoundException
      */
 
-    public PlayerRecord chooseAbility(String playerId, String abilityId) throws AbilityNotFoundException {
-        PlayerRecord playerRecord = playerRepository.findById(playerId).orElse(null);
-        if (playerRecord == null) {
-            return null;
-        }
+    public PlayerRecord chooseAbility(String playerId, String abilityId) throws AbilityNotFoundException, PlayerNotFoundException {
+        PlayerRecord playerRecord = playerRepository.findById(playerId).orElseThrow(() -> new PlayerNotFoundException(
+            "Player could not be found with id: " + playerId + "."));
 
         if (!AbilityConstants.ABILITY_MAP.containsKey(abilityId)) {
             throw new AbilityNotFoundException("Cannot choose ability with ID: " + abilityId + ".");
@@ -153,8 +198,8 @@ public class PlayerService {
     private String generatePlayerId() {
         int numPlayers = playerRepository.findAll().size();
 
-        if (numPlayers < PLAYER_IDS.length) {
-            return PLAYER_IDS[numPlayers];
+        if (numPlayers < PlayerConstants.PLAYER_IDS.length) {
+            return PlayerConstants.PLAYER_IDS[numPlayers];
         }
 
         throw new IllegalStateException("Maximum number of Players reached.");

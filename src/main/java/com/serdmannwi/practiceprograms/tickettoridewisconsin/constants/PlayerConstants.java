@@ -7,4 +7,7 @@ public class PlayerConstants {
     public static final String PLAYER_TWO_ID = "PL2";
     public static final String PLAYER_THREE_ID = "PL3";
     public static final String PLAYER_FOUR_ID = "PL4";
+
+    /**--------------------------------------------------- ID List ------------------------------------------------**/
+    public static final String[] PLAYER_IDS = {PLAYER_ONE_ID, PLAYER_TWO_ID, PLAYER_THREE_ID, PLAYER_FOUR_ID};
 }
