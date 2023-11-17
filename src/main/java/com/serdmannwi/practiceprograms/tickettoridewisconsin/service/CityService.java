@@ -33,7 +33,7 @@ public class CityService {
     }
 
     /**
-     * For each City, this method will call wrapAddEconomyInfoToCity which will modify the records in the database so that
+     * For each City, this method will call addEconomyInfoToCity which will modify the records in the database so that
      * each City will contain a ProductID and an EconomyRoll.
      * If a City is not found, @Transactional prevents the database from being updated and an exception is thrown to be
      * caught in CityController which will send an appropriate error response to the frontend.
@@ -71,7 +71,7 @@ public class CityService {
     //TODO Refactor so that appropriate product list for each region is called.
     public List<City> addEconomyInfoToCity(Map<Integer, List<String>> cityMap) throws CityNotFoundException {
         List<City> updatedCities = new ArrayList<>();
-        List<String> productList = new ArrayList<>();
+        List<String> productList;
         City city;
         int regionValue = 0;
 

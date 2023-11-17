@@ -148,7 +148,7 @@ public class PlayerController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("startNextRound") //Possibly not needed. New Rounds automatically started in PlayerService
+    @PutMapping("/startNextRound") //Possibly not needed. New Rounds automatically started in PlayerService
     public ResponseEntity<?> startNextRound() {
         try {
             playerService.startNextRound();

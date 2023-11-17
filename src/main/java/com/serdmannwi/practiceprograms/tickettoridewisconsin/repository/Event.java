@@ -8,6 +8,7 @@ public class Event {
     @Id
     private String eventId;
     private String cardDescription;
+    private String effectId;
     private String effectDescription;
     private String resolutionMessage;
     private String expirationMessage;
@@ -19,7 +20,7 @@ public class Event {
 
     public Event() {}
 
-    public Event(String name, String eventId, String cardDescription, String effectDescription, String resolutionMessage,
+    public Event(String name, String eventId, String cardDescription, String effectId, String effectDescription, String resolutionMessage,
                  String expirationMessage, EventType eventType, boolean isActive, boolean hasExpired, int turnsRemaining,
                  int eventDuration) {
         this.name = name;
@@ -117,5 +118,13 @@ public class Event {
 
     public void setEventDuration(int eventDuration) {
         this.eventDuration = eventDuration;
+    }
+
+    public String getEffectId() {
+        return effectId;
+    }
+
+    public void setEffectId(String effectId) {
+        this.effectId = effectId;
     }
 }
