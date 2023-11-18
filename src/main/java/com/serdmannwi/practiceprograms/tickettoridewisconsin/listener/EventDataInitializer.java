@@ -1,30 +1,48 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.listener;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.Event;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.EventRepository;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.EventType;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.ActionConstants;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.EventConditionConstants;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.EventConstants;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.*;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EventDataInitializer implements ApplicationListener<ContextRefreshedEvent> {
+public class EventDataInitializer {
+
+    private EventRepository eventRepository;
+    private EventConditionRepository conditionRepository;
 
     @Autowired
-    private EventRepository eventRepository;
-    private final String TEST_EVENT_ONE_ID = "Event1";
-    private final String TEST_EVENT_TWO_ID = "Event2";
-    private final String TEST_EVENT_THREE_ID = "Event3";
-    private final String TEST_EVENT_FOUR_ID = "Event4";
-
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (eventRepository.count() == 0) {
-            eventRepository.save(new Event("Test Event 1", TEST_EVENT_ONE_ID, "Test Event 1", "Test Effect ID",
-                "Test Event 1 Description", "Test Event 1 Resolved",
-                "Test Event 1 Expired", EventType.SINGLEPLAYER_IMMEDIATE, false, false,
-                0, 0));
-        }
+    public EventDataInitializer(EventRepository eventRepository, EventConditionRepository eventConditionRepository) {
+        this.eventRepository = eventRepository;
+        this.conditionRepository = eventConditionRepository;
     }
+
+    @PostConstruct
+    public void init() {
+        //Create and save Passive Events
+        SinglePlayerPassiveEvent bailoutEvent = new SinglePlayerPassiveEvent(EventConstants.BAILOUT_NAME,
+            EventConstants.BAILOUT_ID, EventConstants.BAILOUT_DESC);
+        eventRepository.save(bailoutEvent);
+
+        //Create Active Events without Conditions
+        SinglePlayerActiveEvent derailmentEvent = new SinglePlayerActiveEvent(EventConstants.DERAILMENT_NAME,
+            EventConstants.DERAILMENT_ID, EventConstants.DERAILMENT_DESC, ActionConstants.RECEIVE_FREIGHT_CONTRACT_POINTS_ID);
+        eventRepository.save(derailmentEvent);
+
+        //Create Conditions with reference to Event
+        EventCondition eventCondition = new EventCondition(EventConditionConstants.DERAILMENT_CONDITION_ID, derailmentEvent,
+            EventConditionConstants.DERAILMENT_CONDITION_ID);
+        conditionRepository.save(eventCondition);
+
+        //Set reference from Event to Condition
+        derailmentEvent.setEventCondition(eventCondition);
+        eventRepository.save(derailmentEvent);
+    }
+
+
 }

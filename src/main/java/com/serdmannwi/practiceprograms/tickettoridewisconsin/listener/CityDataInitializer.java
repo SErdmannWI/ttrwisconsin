@@ -20,8 +20,6 @@ public class CityDataInitializer implements ApplicationListener<ContextRefreshed
     private final String TEST_CITY_ONE_ID = "City1";
     private final String TEST_CITY_TWO_ID = "City2";
     private final String TEST_CITY_THREE_ID = "City3";
-    private final String TEST_CITY_FOUR_ID = "City 4";
-    private final List<String> TEST_CITY_PRODUCTS = new ArrayList<>(Arrays.asList("Product1", "Product2"));
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {

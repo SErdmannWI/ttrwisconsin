@@ -10,6 +10,7 @@ public class ActionConstants {
     public static final String RESOLVE_EVENT = "Resolve ongoing event";
     public static final String CHOOSE_FREIGHT_CONTRACTS = "Choose more Freight Contracts";
     public static final String CANCEL_FREIGHT_CONTRACT = "Cancel Freight Contract";
+    public static final String RECEIVE_FREIGHT_CONTRACT_POINTS = "Earn Freight Contract Points";
 
     /**---------------------------------------------------- IDs ----------------------------------------------------**/
     public static final String PICK_CARDS_ID = "Action1";
@@ -19,4 +20,5 @@ public class ActionConstants {
     public static final String RESOLVE_EVENT_ID = "Action5";
     public static final String CHOOSE_FREIGHT_CONTRACTS_ID = "Action6";
     public static final String CANCEL_FREIGHT_CONTRACT_ID = "Action7";
+    public static final String RECEIVE_FREIGHT_CONTRACT_POINTS_ID = "Action8";
 }

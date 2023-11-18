@@ -57,6 +57,13 @@ public class EventController {
         return ResponseEntity.ok(recordToResponse(event));
     }
 
+    @PutMapping("/createEventMap")
+    public ResponseEntity<String> createEventMap(String[] playerIds) {
+        eventService.createPlayerEventMap(playerIds);
+
+        return ResponseEntity.ok().body("Created Event Map");
+    }
+
     @PutMapping("/activate/{id}")
     public ResponseEntity<?> activateEvent(@PathVariable("id") String id) {
         Event event = eventService.getEventById(id);
@@ -99,6 +106,15 @@ public class EventController {
         return ResponseEntity.ok(recordToResponse(deactivatedEvent));
     }
 
+    @PutMapping("/incrementEventTimer")
+    public ResponseEntity<String> incrementEventTimer() {
+        List<Event> activeEvents = eventService.getAllActiveEvents();
+        if (activeEvents.isEmpty()) {
+            return ResponseEntity.ok().body("No Active Events");
+        }
+        return ResponseEntity.ok().body("");
+    }
+
     /**----------------------------------------- Conversion Methods -----------------------------------------**/
     private EventResponse recordToResponse(Event event) {
         EventResponse eventResponse = new EventResponse();
@@ -106,14 +122,14 @@ public class EventController {
         eventResponse.setName(event.getName());
         eventResponse.setEventId(event.getEventId());
         eventResponse.setCardDescription(event.getCardDescription());
-        eventResponse.setEffectDescription(event.getEffectDescription());
-        eventResponse.setResolutionMessage(event.getResolutionMessage());
-        eventResponse.setExpirationMessage(event.getExpirationMessage());
-        eventResponse.setEventType(event.getEventType());
-        eventResponse.setActive(event.isActive());
-        eventResponse.setHasExpired(event.hasExpired());
-        eventResponse.setTurnsRemaining(event.getTurnsRemaining());
-        eventResponse.setEventDuration(event.getEventDuration());
+//        eventResponse.setEffectDescription(event.getEffectDescription());
+//        eventResponse.setResolutionMessage(event.getResolutionMessage());
+//        eventResponse.setExpirationMessage(event.getExpirationMessage());
+//        eventResponse.setEventType(event.getEventType());
+//        eventResponse.setActive(event.isActive());
+//        eventResponse.setHasExpired(event.hasExpired());
+//        eventResponse.setTurnsRemaining(event.getTurnsRemaining());
+//        eventResponse.setEventDuration(event.getEventDuration());
 
         return eventResponse;
     }

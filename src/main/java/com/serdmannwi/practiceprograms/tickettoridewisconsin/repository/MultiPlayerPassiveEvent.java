@@ -1,4 +1,4 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
 
-public class Product {
+public class MultiPlayerPassiveEvent extends Event{
 }
