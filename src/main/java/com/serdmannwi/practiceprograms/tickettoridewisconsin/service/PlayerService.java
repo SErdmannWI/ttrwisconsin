@@ -5,10 +5,10 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.CityConst
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.FreightStationConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.PlayerConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.NewPlayerRequest;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.AbilityNotFoundException;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.MaxPlayersException;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.NoAvailableFreightStationException;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.PlayerNotFoundException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.AbilityNotFoundException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.MaxPlayersException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.NoAvailableFreightStationException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.PlayerNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRepository;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.Ability;
@@ -64,10 +64,8 @@ public class PlayerService {
     /**---------------------------------------- Database Interactions ------------------------------------------------*/
 
     public PlayerRecord getPlayerById(String id) throws PlayerNotFoundException {
-        PlayerRecord playerRecord = playerRepository.findById(id)
+        return playerRepository.findById(id)
             .orElseThrow(() -> new PlayerNotFoundException("Could not find Player with id: " + id + "."));
-
-        return playerRepository.findById(id).orElse(null);
     }
 
     public List<PlayerRecord> getAllPlayers() {

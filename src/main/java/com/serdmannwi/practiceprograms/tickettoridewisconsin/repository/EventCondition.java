@@ -20,4 +20,36 @@ public class EventCondition {
         this.conditionDescription = conditionDescription;
         this.conditionMet = false;
     }
+
+    public String getConditionId() {
+        return conditionId;
+    }
+
+    public void setConditionId(String conditionId) {
+        this.conditionId = conditionId;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    public String getConditionDescription() {
+        return conditionDescription;
+    }
+
+    public void setConditionDescription(String conditionDescription) {
+        this.conditionDescription = conditionDescription;
+    }
+
+    public boolean isConditionMet() {
+        return conditionMet;
+    }
+
+    public void setConditionMet(boolean conditionMet) {
+        this.conditionMet = conditionMet;
+    }
 }

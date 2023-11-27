@@ -1,26 +1,24 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.EventConstants;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 @Entity
 @DiscriminatorValue(EventConstants.SINGLE_PLAYER_ACTIVE_EVENT)
 public class SinglePlayerActiveEvent extends Event{
     private String playerId;
-    @OneToOne(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private EventCondition eventCondition;
     private String actionId; //ID of Action affected by failing to meet the EventCondition
 
     public SinglePlayerActiveEvent() {}
 
-    public SinglePlayerActiveEvent(String name, String eventId, String cardDescription, String actionId) {
+    public SinglePlayerActiveEvent(String name, String eventId, String cardDescription, String actionId,
+                                   EventCondition eventCondition){
         super(name, eventId, cardDescription);
         this.actionId = actionId;
         this.playerId = "";
-        this.eventCondition = null;
+        this.eventCondition = eventCondition;
     }
 
     public String getPlayerId() {
@@ -47,5 +45,12 @@ public class SinglePlayerActiveEvent extends Event{
         this.actionId = actionId;
     }
 
-
+    @Override
+    public String toString() {
+        return "SinglePlayerActiveEvent{" +
+            "playerId='" + playerId + '\'' +
+            ", eventCondition=" + eventCondition +
+            ", actionId='" + actionId + '\'' +
+            '}';
+    }
 }

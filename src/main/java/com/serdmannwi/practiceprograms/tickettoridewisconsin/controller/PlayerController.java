@@ -2,6 +2,10 @@ package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.*;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.*;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.AbilityNotFoundException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.MaxPlayersException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.NoAvailableFreightStationException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.PlayerNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.PlayerService;
 import org.springframework.http.HttpStatus;
@@ -9,9 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 import java.util.stream.Collectors;
 
 //TODO Consider refactoring with @ControllerAdvice annotation with a GlobalExceptionHandler

@@ -25,11 +25,23 @@ public class NewPlayerRequest {
         return playerName;
     }
 
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
     public String getPlayerIconId() {
         return playerIconId;
     }
 
+    public void setPlayerIconId(String playerIconId) {
+        this.playerIconId = playerIconId;
+    }
+
     public String getPlayerColorId() {
         return playerColorId;
+    }
+
+    public void setPlayerColorId(String playerColorId) {
+        this.playerColorId = playerColorId;
     }
 }

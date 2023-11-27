@@ -1,9 +1,8 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.CityEconomyRequest;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.CityResponse;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.CityInitializationException;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.CityNotFoundException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.city.CityInitializationException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.city.CityNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.CityService;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/city")

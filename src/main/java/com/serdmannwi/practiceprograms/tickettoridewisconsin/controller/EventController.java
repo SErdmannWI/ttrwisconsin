@@ -1,7 +1,9 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.EventResponse;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.SinglePlayerActiveEventResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.Event;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.SinglePlayerActiveEvent;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.EventService;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
 import org.springframework.http.HttpStatus;

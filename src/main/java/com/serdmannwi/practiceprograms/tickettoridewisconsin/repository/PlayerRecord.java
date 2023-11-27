@@ -3,6 +3,7 @@ package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.PlayerConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.utils.JsonUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -58,8 +59,8 @@ public class PlayerRecord {
         ownedFreightStationId = "";
         ownedAbilityId = "";
 
-        score = 0;
-        trainsRemaining = 60;
+        score = PlayerConstants.STARTING_SCORE;
+        trainsRemaining = PlayerConstants.STARTING_TRAINS;
         freightContractsCompleted = 0;
     }
 

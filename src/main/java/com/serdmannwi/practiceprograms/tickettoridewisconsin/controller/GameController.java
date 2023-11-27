@@ -1,9 +1,8 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.InvalidNumberOfPlayersException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.InvalidNumberOfPlayersException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.GameService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

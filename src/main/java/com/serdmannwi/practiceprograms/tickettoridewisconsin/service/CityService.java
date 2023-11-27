@@ -3,8 +3,8 @@ package com.serdmannwi.practiceprograms.tickettoridewisconsin.service;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.CityConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.GameConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.ProductConstants;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.CityInitializationException;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.CityNotFoundException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.city.CityInitializationException;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.city.CityNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.CityRepository;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.FreightContract;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Creates a new City Repository on instantiation that will be populated with Cities from CityDataInitializer.

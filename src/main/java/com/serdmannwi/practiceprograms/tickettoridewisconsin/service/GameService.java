@@ -1,15 +1,12 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.service;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.InvalidNumberOfPlayersException;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.InvalidNumberOfPlayersException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class GameService {
