@@ -24,6 +24,7 @@ public class PlayerService {
     private final PlayerRepository playerRepository;
     private Deque<String> playerQueue; //Queue of Player IDs in order of turns
     private List<String> deferredTurns; //Used for if a Player has the Ability to defer turns to next round
+    private List<String> chosenAbilities; //Used for IDs of chosen Abilities
     private String[] playerOrderMaster; //Master order for Player turns
     private Map<Integer, Map<String, FreightStation>> unownedFreightStations;
     private Map<String, FreightStation> ownedFreightStations;
@@ -38,6 +39,7 @@ public class PlayerService {
         ownedFreightStations = new HashMap<>();
         ownedAbilities = new HashMap<>();
         deferredTurns = new ArrayList<>();
+        chosenAbilities = new ArrayList<>();
     }
 
     /**------------------------------------------- Player Creation ---------------------------------------------------*/
@@ -182,11 +184,16 @@ public class PlayerService {
             throw new AbilityNotFoundException("Cannot choose ability with ID: " + abilityId + ".");
         }
 
+        if (chosenAbilities.contains(abilityId)) {
+            throw new AbilityNotFoundException("Ability already chosen with ID: " + abilityId + ".");
+        }
+
         Ability ability = AbilityConstants.ABILITY_MAP.get(abilityId);
         Ability chosenAbility = new Ability(ability.getAbilityName(), ability.getAbilityId(), ability.getDescription(),
             ability.getBonusPoints(), playerId);
 
         ownedAbilities.put(playerId, chosenAbility);
+        chosenAbilities.add(chosenAbility.getAbilityId());
         playerRecord.setOwnedAbilityId(abilityId);
 
         return playerRepository.save(playerRecord);
@@ -209,6 +216,10 @@ public class PlayerService {
     }
 
     public int getNumPlayers() { return this.numPlayers; }
+
+    public List<String> getChosenAbilities() { return this.chosenAbilities; }
+
+    public Map<String, Ability> getOwnedAbilities() { return this.ownedAbilities; }
 
     /**
      * Method runs at startup

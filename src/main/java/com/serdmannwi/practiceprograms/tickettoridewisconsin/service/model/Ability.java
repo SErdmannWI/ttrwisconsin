@@ -1,5 +1,9 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model;
 
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.AbilityConstants;
+
+import java.util.Objects;
+
 public class Ability {
     private String abilityName;
     private String abilityId;
@@ -29,6 +33,7 @@ public class Ability {
         this.description = description;
         this.bonusPoints = bonusPoints;
         this.ownerId = ownerId;
+        this.usesRemaining = AbilityConstants.ABILITY_STARTING_USES;
         this.isActive = true;
         this.isUnlimited = false;
     }
@@ -95,5 +100,29 @@ public class Ability {
 
     public void setUnlimited(boolean unlimited) {
         isUnlimited = unlimited;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(abilityName, abilityId, ownerId, description, usesRemaining, bonusPoints, isActive, isUnlimited);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Ability other = (Ability) obj;
+        return Objects.equals(abilityName, other.abilityName) &&
+            Objects.equals(abilityId, other.abilityId) &&
+            Objects.equals(ownerId, other.ownerId) &&
+            Objects.equals(description, other.description) &&
+            usesRemaining == other.usesRemaining &&
+            bonusPoints == other.bonusPoints &&
+            isActive == other.isActive &&
+            isUnlimited == other.isUnlimited;
     }
 }

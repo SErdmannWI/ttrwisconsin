@@ -58,4 +58,7 @@ public class AbilityConstants {
         ABILITY_MAP.put(DELAY_TURN_ID, DELAY_TURN_ABILITY);
         ABILITY_MAP.put(ECONOMY_SWAP_ID, ECONOMY_SWAP_ABILITY);
     }
+
+    /**---------------------------------------------- Abilities Values -----------------------------------------------*/
+    public static final int ABILITY_STARTING_USES = 3;
 }
