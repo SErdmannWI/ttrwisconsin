@@ -1,1 +1,3 @@
 rootProject.name = 'tickettoridewisconsin'
+include 'integrationTests'
+

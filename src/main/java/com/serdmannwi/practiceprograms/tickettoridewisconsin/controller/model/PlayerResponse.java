@@ -44,7 +44,7 @@ public class PlayerResponse {
     private int freightContractsCompleted;
 
     @NotNull
-    @JsonProperty("compeltedRoutes")
+    @JsonProperty("completedRoutes")
     private List<String> completedRoutes;
 
     @NotNull
