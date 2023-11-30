@@ -22,9 +22,10 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-//	testImplementation 'org.testcontainers:junit-jupiter'
-//	testImplementation 'org.testcontainers:mysql'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+	testImplementation 'org.testcontainers:testcontainers:1.19.3'
+	testImplementation 'org.testcontainers:junit-jupiter:1.19.3'
+	testImplementation 'org.testcontainers:mysql:1.19.3'
 
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
 }
@@ -56,5 +57,10 @@ task integrationTest(type: Test) {
 	classpath = sourceSets.integrationTest.runtimeClasspath
 	shouldRunAfter test // Ensure that unit tests run before integration tests
 }
+
+processIntegrationTestResources {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 
 check.dependsOn integrationTest

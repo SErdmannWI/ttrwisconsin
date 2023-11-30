@@ -12,7 +12,6 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.PlayerCon
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.*;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.PlayerService;
-import jakarta.transaction.Transactional;
 import net.bytebuddy.utility.dispatcher.JavaDispatcher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +20,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -31,10 +35,20 @@ import java.util.UUID;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-//import org.testcontainers.containers.MySQLContainer;
-//import org.testcontainers.junit.jupiter.Testcontainers;
-//import org.testcontainers.junit.jupiter.Container;
-//@Testcontainers
+
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+
+@TestPropertySource(properties = {
+    "spring.datasource.url=${mySQLContainer.getJdbcUrl()}",
+    "spring.datasource.username=${mySQLContainer.getUsername()}",
+    "spring.datasource.password=${mySQLContainer.getPassword()}"
+})
+
+@Testcontainers
 @IntegrationTest
 public class PlayerControllerTests {
 
@@ -45,11 +59,20 @@ public class PlayerControllerTests {
     private PlayerService playerService;
     private ObjectMapper mapper;
 
-//    @Container
-//    public static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:5.7")
-//        .withDatabaseName("testdb")
-//        .withUsername("test")
-//        .withPassword("test");
+    @Container
+    public static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.0")
+        .withExposedPorts(3306)
+        .withDatabaseName("testdb")
+        .withUsername("test")
+        .withPassword("test");
+
+    @DynamicPropertySource
+    static void databaseProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", mySQLContainer::getUsername);
+        registry.add("spring.datasource.password", mySQLContainer::getPassword);
+    }
+
 
     /**------------------------------------------------ Test Constants -----------------------------------------------*/
     private static final List<PlayerRecord> TEST_PLAYER_RECORDS_SIZE_2 = new ArrayList<>(Arrays.asList(
@@ -97,6 +120,7 @@ public class PlayerControllerTests {
     }
 
     @Test
+    @Transactional
     public void createNewPlayer_tooManyPlayers_returnsBadRequest() throws Exception {
         //GIVEN
         NewPlayerRequest newPlayerRequest = createNewPlayerRequest();
@@ -284,6 +308,7 @@ public class PlayerControllerTests {
     /**---------------------------------------- Player Turn Manager Tests --------------------------------------------*/
 
     @Test
+    @Transactional
     public void createTurnOrder_validPlayerIds_returnsOKResponse() throws Exception {
         //GIVEN
         NewPlayerRequest newPlayerRequest = createNewPlayerRequest();
@@ -310,6 +335,7 @@ public class PlayerControllerTests {
     }
 
     @Test
+    @Transactional
     public void getNextPlayer_returnsNextPlayer() throws Exception {
         //GIVEN
         NewPlayerRequest newPlayerRequest = createNewPlayerRequest();
@@ -353,6 +379,7 @@ public class PlayerControllerTests {
      * @throws Exception
      */
     @Test
+    @Transactional
     public void deferPlayerTurn_validPlayer_returnsOKResponse() throws Exception {
         //GIVEN
         NewPlayerRequest newPlayerRequest = createNewPlayerRequest();
@@ -436,6 +463,8 @@ public class PlayerControllerTests {
     /**------------------------------------------- Player Choices Tests ----------------------------------------------*/
 
     @Test
+    @Transactional
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void chooseFreightStation_correctFreightStation_addsFreightStation() throws Exception {
         //GIVEN
         NewPlayerRequest newPlayerRequest = createNewPlayerRequest();
@@ -473,6 +502,7 @@ public class PlayerControllerTests {
     }
 
     @Test
+    @Transactional
     public void chooseFreightStation_stationAlreadyChosen_returnsBadRequest() throws Exception {
         //GIVEN
         NewPlayerRequest newPlayerRequest1 = createNewPlayerRequest();
@@ -518,6 +548,7 @@ public class PlayerControllerTests {
     }
 
     @Test
+    @Transactional
     public void chooseAbility_validRequest_addsAbility() throws Exception {
         //GIVEN
         NewPlayerRequest newPlayerRequest = createNewPlayerRequest();
@@ -554,6 +585,8 @@ public class PlayerControllerTests {
     }
 
     @Test
+    @Transactional
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void chooseAbility_abilityAlreadyChosen_returnsBadRequest() throws Exception {
         //GIVEN
         NewPlayerRequest newPlayerRequest1 = createNewPlayerRequest();
