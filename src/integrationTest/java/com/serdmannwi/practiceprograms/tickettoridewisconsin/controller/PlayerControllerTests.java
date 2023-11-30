@@ -5,13 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.jsonpath.JsonPath;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.IntegrationTest;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.AbilityConstants;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.CityConstants;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.FreightStationConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.PlayerConstants;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.NewPlayerRequest;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.PlayerResponse;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.UpdatePlayerRequest;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.*;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.PlayerService;
 import jakarta.transaction.Transactional;
+import net.bytebuddy.utility.dispatcher.JavaDispatcher;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -281,45 +284,316 @@ public class PlayerControllerTests {
     /**---------------------------------------- Player Turn Manager Tests --------------------------------------------*/
 
     @Test
-    public void createTurnOrder_validPlayerIds_returnsOKResponse() {
+    public void createTurnOrder_validPlayerIds_returnsOKResponse() throws Exception {
+        //GIVEN
+        NewPlayerRequest newPlayerRequest = createNewPlayerRequest();
+        String[] playerIds = new String[4];
 
+        for (int i = 0; i < 4; i++) {
+            MvcResult result = mockMvc.perform(post("/player/newPlayer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(newPlayerRequest)))
+                .andReturn();
+
+            String responseContent = result.getResponse().getContentAsString();
+            playerIds[i] = JsonPath.read(responseContent, "$.playerId");
+        }
+
+        //WHEN
+        mockMvc.perform(post("/player/createTurnOrder", playerIds)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(playerIds))
+                .accept(MediaType.APPLICATION_JSON))
+
+        //THEN
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void createTurnOrder_invalidPlayerIds_returnsNotFound() {
+    public void getNextPlayer_returnsNextPlayer() throws Exception {
+        //GIVEN
+        NewPlayerRequest newPlayerRequest = createNewPlayerRequest();
+        String[] playerIds = new String[4];
 
+        for (int i = 0; i < 4; i++) {
+            MvcResult result = mockMvc.perform(post("/player/newPlayer")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(newPlayerRequest)))
+                .andReturn();
+
+            String responseContent = result.getResponse().getContentAsString();
+            playerIds[i] = JsonPath.read(responseContent, "$.playerId");
+        }
+
+        mockMvc.perform(post("/player/createTurnOrder", playerIds)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(playerIds))
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+
+        //WHEN
+        mockMvc.perform(get("/player/getNextPlayer")
+            .accept(MediaType.APPLICATION_JSON))
+
+        //THEN
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("playerName").value(TEST_PLAYER_NAME))
+            .andExpect(jsonPath("playerId").value(PlayerConstants.PLAYER_ONE_ID))
+            .andExpect(jsonPath("iconId").value(TEST_USER_ICON_ID))
+            .andExpect(jsonPath("color").value(TEST_USER_COLOR_ID))
+            .andExpect(jsonPath("ownedFreightStation").value(""))
+            .andExpect(jsonPath("ownedAbility").value(""))
+            .andExpect(jsonPath("score").value(PlayerConstants.STARTING_SCORE))
+            .andExpect(jsonPath("trainsRemaining").value(PlayerConstants.STARTING_TRAINS))
+            .andExpect(jsonPath("freightContractsCompleted").value(0));
     }
 
+    /**
+     * Tests that the game will successfully progress to the next round and repeat turns for any player who has deferred.
+     * @throws Exception
+     */
     @Test
-    public void getNextPlayer_returnsNextPlayer() {
+    public void deferPlayerTurn_validPlayer_returnsOKResponse() throws Exception {
+        //GIVEN
+        NewPlayerRequest newPlayerRequest = createNewPlayerRequest();
+        String[] playerIds = new String[4];
 
-    }
+        for (int i = 0; i < 4; i++) {
+            MvcResult result = mockMvc.perform(post("/player/newPlayer")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(newPlayerRequest)))
+                .andReturn();
 
-    @Test
-    public void deferPlayerTurn_validPlayer_returnsOKResponse() {
+            String responseContent = result.getResponse().getContentAsString();
+            playerIds[i] = JsonPath.read(responseContent, "$.playerId");
+        }
 
+        mockMvc.perform(post("/player/createTurnOrder", playerIds)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(playerIds))
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+
+        //Progress through two rounds
+        for (int i = 0; i < 8; i++) {
+            mockMvc.perform(get("/player/getNextPlayer")
+                    .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        }
+
+        //WHEN
+        MvcResult result = mockMvc.perform(get("/player/getNextPlayer")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String responseContent = result.getResponse().getContentAsString();
+        String playerId = JsonPath.read(responseContent, "$.playerId");
+
+        mockMvc.perform(put("/player/deferPlayerTurn/{playerId}", playerId)
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+
+        //Progress through next round
+        for (int i = 0; i < 3; i++) {
+            mockMvc.perform(get("/player/getNextPlayer")
+                    .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+        }
+
+        //Expect next two Players to be the same Player
+        MvcResult player1Result = mockMvc.perform(get("/player/getNextPlayer")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String player1Response = player1Result.getResponse().getContentAsString();
+        PlayerResponse player1 = mapper.readValue(player1Response, PlayerResponse.class);
+
+        MvcResult player2Result = mockMvc.perform(get("/player/getNextPlayer")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String player2Response = player2Result.getResponse().getContentAsString();
+        PlayerResponse player2 = mapper.readValue(player2Response, PlayerResponse.class);
+
+        Assertions.assertEquals(player1, player2);
+
+        //Should be different Player
+        MvcResult player3Result = mockMvc.perform(get("/player/getNextPlayer")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String player3Response = player3Result.getResponse().getContentAsString();
+        PlayerResponse player3 = mapper.readValue(player3Response, PlayerResponse.class);
+
+        Assertions.assertNotEquals(player1, player3);
     }
 
 
     /**------------------------------------------- Player Choices Tests ----------------------------------------------*/
 
     @Test
-    public void chooseFreightStation_correctFreightStation_addsFreightStation() {
+    public void chooseFreightStation_correctFreightStation_addsFreightStation() throws Exception {
+        //GIVEN
+        NewPlayerRequest newPlayerRequest = createNewPlayerRequest();
 
+        MvcResult result = mockMvc.perform(post("/player/newPlayer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(newPlayerRequest)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String responseContent = result.getResponse().getContentAsString();
+        String playerId = JsonPath.read(responseContent, "$.playerId");
+
+        ChooseFreightStationRequest freightStationRequest = new ChooseFreightStationRequest();
+        freightStationRequest.setPlayerId(playerId);
+        freightStationRequest.setRegionId(CityConstants.REGION_ONE_ID);
+        freightStationRequest.setFreightStationId(FreightStationConstants.MADISON_FREIGHT_ID);
+
+        //WHEN
+        mockMvc.perform(put("/player/chooseFreightStation", freightStationRequest)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(freightStationRequest)))
+
+        //THEN
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("playerName").value(TEST_PLAYER_NAME))
+            .andExpect(jsonPath("playerId").value(PlayerConstants.PLAYER_ONE_ID))
+            .andExpect(jsonPath("iconId").value(TEST_USER_ICON_ID))
+            .andExpect(jsonPath("color").value(TEST_USER_COLOR_ID))
+            .andExpect(jsonPath("ownedFreightStation").value(FreightStationConstants.MADISON_FREIGHT_ID))
+            .andExpect(jsonPath("ownedAbility").value(""))
+            .andExpect(jsonPath("score").value(PlayerConstants.STARTING_SCORE))
+            .andExpect(jsonPath("trainsRemaining").value(PlayerConstants.STARTING_TRAINS))
+            .andExpect(jsonPath("freightContractsCompleted").value(0));
     }
 
     @Test
-    public void chooseFreightStation_stationAlreadyChosen_returnsBadRequest() {
+    public void chooseFreightStation_stationAlreadyChosen_returnsBadRequest() throws Exception {
+        //GIVEN
+        NewPlayerRequest newPlayerRequest1 = createNewPlayerRequest();
+        NewPlayerRequest newPlayerRequest2 = createNewPlayerRequest();
 
+        MvcResult player1Result = mockMvc.perform(post("/player/newPlayer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(newPlayerRequest1)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String player1ResponseContent = player1Result.getResponse().getContentAsString();
+        String player1Id = JsonPath.read(player1ResponseContent, "$.playerId");
+
+        ChooseFreightStationRequest player1FreightStationRequest = new ChooseFreightStationRequest();
+        player1FreightStationRequest.setPlayerId(player1Id);
+        player1FreightStationRequest.setRegionId(CityConstants.REGION_ONE_ID);
+        player1FreightStationRequest.setFreightStationId(FreightStationConstants.MADISON_FREIGHT_ID);
+
+        mockMvc.perform(put("/player/chooseFreightStation", player1FreightStationRequest)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(player1FreightStationRequest)))
+            .andExpect(status().isOk());
+
+        MvcResult result = mockMvc.perform(post("/player/newPlayer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(newPlayerRequest2)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String player2ResponseContent = result.getResponse().getContentAsString();
+        String playerId = JsonPath.read(player2ResponseContent, "$.playerId");
+
+        ChooseFreightStationRequest player2FreightStationRequest = new ChooseFreightStationRequest();
+        player2FreightStationRequest.setPlayerId(playerId);
+        player2FreightStationRequest.setRegionId(CityConstants.REGION_ONE_ID);
+        player2FreightStationRequest.setFreightStationId(FreightStationConstants.MADISON_FREIGHT_ID);
+
+        mockMvc.perform(put("/player/chooseFreightStation", player2FreightStationRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(player2FreightStationRequest)))
+            .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void chooseAbility_validRequest_addsAbility() {
+    public void chooseAbility_validRequest_addsAbility() throws Exception {
+        //GIVEN
+        NewPlayerRequest newPlayerRequest = createNewPlayerRequest();
 
+        MvcResult result = mockMvc.perform(post("/player/newPlayer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(newPlayerRequest)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String responseContent = result.getResponse().getContentAsString();
+        String playerId = JsonPath.read(responseContent, "$.playerId");
+
+        //WHEN
+        ChooseAbilityRequest chooseAbilityRequest = new ChooseAbilityRequest();
+        chooseAbilityRequest.setPlayerId(playerId);
+        chooseAbilityRequest.setAbilityId(AbilityConstants.DELAY_TURN_ID);
+
+        mockMvc.perform(put("/player/chooseAbility", chooseAbilityRequest)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(chooseAbilityRequest)))
+
+        //THEN
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("playerName").value(TEST_PLAYER_NAME))
+            .andExpect(jsonPath("playerId").value(PlayerConstants.PLAYER_ONE_ID))
+            .andExpect(jsonPath("iconId").value(TEST_USER_ICON_ID))
+            .andExpect(jsonPath("color").value(TEST_USER_COLOR_ID))
+            .andExpect(jsonPath("ownedFreightStation").value(""))
+            .andExpect(jsonPath("ownedAbility").value(AbilityConstants.DELAY_TURN_ID))
+            .andExpect(jsonPath("score").value(PlayerConstants.STARTING_SCORE))
+            .andExpect(jsonPath("trainsRemaining").value(PlayerConstants.STARTING_TRAINS))
+            .andExpect(jsonPath("freightContractsCompleted").value(0));
     }
 
     @Test
-    public void chooseAbility_abilityAlreadyChosen_returnsBadRequest() {
+    public void chooseAbility_abilityAlreadyChosen_returnsBadRequest() throws Exception {
+        //GIVEN
+        NewPlayerRequest newPlayerRequest1 = createNewPlayerRequest();
+        NewPlayerRequest newPlayerRequest2 = createNewPlayerRequest();
+
+        MvcResult player1Result = mockMvc.perform(post("/player/newPlayer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(newPlayerRequest1)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String player1ResponseContent = player1Result.getResponse().getContentAsString();
+        String player1Id = JsonPath.read(player1ResponseContent, "$.playerId");
+
+        ChooseAbilityRequest chooseAbilityRequest = new ChooseAbilityRequest();
+        chooseAbilityRequest.setPlayerId(player1Id);
+        chooseAbilityRequest.setAbilityId(AbilityConstants.DELAY_TURN_ID);
+
+        mockMvc.perform(put("/player/chooseAbility", chooseAbilityRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(chooseAbilityRequest)))
+            .andExpect(status().isOk());
+
+        MvcResult result = mockMvc.perform(post("/player/newPlayer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(newPlayerRequest2)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        String player2ResponseContent = result.getResponse().getContentAsString();
+        String player2Id = JsonPath.read(player2ResponseContent, "$.playerId");
+
+        ChooseAbilityRequest player2AbilityRequest = new ChooseAbilityRequest();
+        player2AbilityRequest.setPlayerId(player2Id);
+        player2AbilityRequest.setAbilityId(AbilityConstants.DELAY_TURN_ID);
+
+        mockMvc.perform(put("/player/chooseAbility", player2AbilityRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(player2AbilityRequest)))
+            .andExpect(status().isBadRequest());
 
     }
 

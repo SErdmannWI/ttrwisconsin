@@ -19,4 +19,12 @@ public class ChooseAbilityRequest {
     public String getAbilityId() {
         return abilityId;
     }
+
+    public void setPlayerId(String playerId) {
+        this.playerId = playerId;
+    }
+
+    public void setAbilityId(String abilityId) {
+        this.abilityId = abilityId;
+    }
 }

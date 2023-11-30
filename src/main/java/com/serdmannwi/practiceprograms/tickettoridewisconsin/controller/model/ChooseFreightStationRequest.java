@@ -25,4 +25,16 @@ public class ChooseFreightStationRequest {
     public String getFreightStationId() {
         return freightStationId;
     }
+
+    public void setPlayerId(String playerId) {
+        this.playerId = playerId;
+    }
+
+    public void setRegionId(int regionId) {
+        this.regionId = regionId;
+    }
+
+    public void setFreightStationId(String freightStationId) {
+        this.freightStationId = freightStationId;
+    }
 }
