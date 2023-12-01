@@ -1,5 +1,7 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.constants;
 
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
+
 import java.util.*;
 
 public class CityConstants {
@@ -238,5 +240,85 @@ public class CityConstants {
     public static final String HS_MSP_DTH = "MSP-DTH";
 
     public static final String HS_TC3_TC4 = "TC3-TC4";
+
+    /**--------------------------------------------Testing City IDs -------------------------------------------------**/
+    public static final City TEST_CITY_1_1 = new City("Test City OneOne", "TC11", CityConstants.REGION_ONE_ID);
+    public static final City TEST_CITY_1_2 = new City("Test City OneTwo", "TC12", CityConstants.REGION_ONE_ID);
+    public static final City TEST_CITY_1_3 = new City("Test City OneThree", "TC13", CityConstants.REGION_ONE_ID);
+    public static final City TEST_CITY_1_4 = new City("Test City OneFour", "TC14", CityConstants.REGION_ONE_ID);
+    public static final City TEST_CITY_1_5 = new City("Test City OneFive", "TC15", CityConstants.REGION_ONE_ID);
+    public static final City TEST_CITY_1_6 = new City("Test City OneSix", "TC16", CityConstants.REGION_ONE_ID);
+    public static final City TEST_CITY_1_7 = new City("Test City OneSeven", "TC17", CityConstants.REGION_ONE_ID);
+    public static final City TEST_CITY_1_8 = new City("Test City OneEight", "TC18", CityConstants.REGION_ONE_ID);
+    public static final City TEST_CITY_1_9 = new City("Test City OneNine", "TC19", CityConstants.REGION_ONE_ID);
+    public static final City TEST_CITY_1_10 = new City("Test City OneTen", "TC110", CityConstants.REGION_ONE_ID);
+
+    public static final City TEST_CITY_2_1 = new City("Test City TwoOne", "TC21", CityConstants.REGION_TWO_ID);
+    public static final City TEST_CITY_2_2 = new City("Test City TwoTwo", "TC22", CityConstants.REGION_TWO_ID);
+    public static final City TEST_CITY_2_3 = new City("Test City TwoThree", "TC23", CityConstants.REGION_TWO_ID);
+    public static final City TEST_CITY_2_4 = new City("Test City TwoFour", "TC24", CityConstants.REGION_TWO_ID);
+    public static final City TEST_CITY_2_5 = new City("Test City TwoFive", "TC25", CityConstants.REGION_TWO_ID);
+    public static final City TEST_CITY_2_6 = new City("Test City TwoSix", "TC26", CityConstants.REGION_TWO_ID);
+    public static final City TEST_CITY_2_7 = new City("Test City TwoSeven", "TC27", CityConstants.REGION_TWO_ID);
+    public static final City TEST_CITY_2_8 = new City("Test City TwoEight", "TC28", CityConstants.REGION_TWO_ID);
+    public static final City TEST_CITY_2_9 = new City("Test City TwoNine", "TC29", CityConstants.REGION_TWO_ID);
+    public static final City TEST_CITY_2_10 = new City("Test City TwoTen", "TC210", CityConstants.REGION_TWO_ID);
+
+    public static final City TEST_CITY_3_1 = new City("Test City ThreeOne", "TC31", CityConstants.REGION_THREE_ID);
+    public static final City TEST_CITY_3_2 = new City("Test City ThreeTwo", "TC32", CityConstants.REGION_THREE_ID);
+    public static final City TEST_CITY_3_3 = new City("Test City ThreeThree", "TC33", CityConstants.REGION_THREE_ID);
+    public static final City TEST_CITY_3_4 = new City("Test City ThreeFour", "TC34", CityConstants.REGION_THREE_ID);
+    public static final City TEST_CITY_3_5 = new City("Test City ThreeFive", "TC35", CityConstants.REGION_THREE_ID);
+    public static final City TEST_CITY_3_6 = new City("Test City ThreeSix", "TC36", CityConstants.REGION_THREE_ID);
+    public static final City TEST_CITY_3_7 = new City("Test City ThreeSeven", "TC37", CityConstants.REGION_THREE_ID);
+    public static final City TEST_CITY_3_8 = new City("Test City ThreeEight", "TC38", CityConstants.REGION_THREE_ID);
+    public static final City TEST_CITY_3_9 = new City("Test City ThreeNine", "TC39", CityConstants.REGION_THREE_ID);
+    public static final City TEST_CITY_3_10 = new City("Test City ThreeTen", "TC310", CityConstants.REGION_THREE_ID);
+
+    public static final City TEST_CITY_4_1 = new City("Test City FourOne", "TC41", CityConstants.REGION_FOUR_ID);
+    public static final City TEST_CITY_4_2 = new City("Test City FourTwo", "TC42", CityConstants.REGION_FOUR_ID);
+    public static final City TEST_CITY_4_3 = new City("Test City FourThree", "TC43", CityConstants.REGION_FOUR_ID);
+    public static final City TEST_CITY_4_4 = new City("Test City FourFour", "TC44", CityConstants.REGION_FOUR_ID);
+    public static final City TEST_CITY_4_5 = new City("Test City FourFive", "TC45", CityConstants.REGION_FOUR_ID);
+    public static final City TEST_CITY_4_6 = new City("Test City FourSix", "TC46", CityConstants.REGION_FOUR_ID);
+    public static final City TEST_CITY_4_7 = new City("Test City FourSeven", "TC47", CityConstants.REGION_FOUR_ID);
+    public static final City TEST_CITY_4_8 = new City("Test City FourEight", "TC48", CityConstants.REGION_FOUR_ID);
+    public static final City TEST_CITY_4_9 = new City("Test City FourNine", "TC49", CityConstants.REGION_FOUR_ID);
+    public static final City TEST_CITY_4_10 = new City("Test City FourTen", "TC410", CityConstants.REGION_FOUR_ID);
+
+    public static Map<Integer, List<String>> getTestCityMap() {
+        Map<Integer, List<String>> testCityMap = new HashMap<>();
+
+        List<String> region1CityIds = Arrays.asList(
+            TEST_CITY_1_1.getCityId(), TEST_CITY_1_2.getCityId(), TEST_CITY_1_3.getCityId(),
+            TEST_CITY_1_4.getCityId(), TEST_CITY_1_5.getCityId(), TEST_CITY_1_6.getCityId(),
+            TEST_CITY_1_7.getCityId(), TEST_CITY_1_8.getCityId(), TEST_CITY_1_9.getCityId(),
+            TEST_CITY_1_10.getCityId());
+
+        List<String> region2CityIds = Arrays.asList(
+            TEST_CITY_2_1.getCityId(), TEST_CITY_2_2.getCityId(), TEST_CITY_2_3.getCityId(),
+            TEST_CITY_2_4.getCityId(), TEST_CITY_2_5.getCityId(), TEST_CITY_2_6.getCityId(),
+            TEST_CITY_2_7.getCityId(), TEST_CITY_2_8.getCityId(), TEST_CITY_2_9.getCityId(),
+            TEST_CITY_2_10.getCityId());
+
+        List<String> region3CityIds = Arrays.asList(
+            TEST_CITY_3_1.getCityId(), TEST_CITY_3_2.getCityId(), TEST_CITY_3_3.getCityId(),
+            TEST_CITY_3_4.getCityId(), TEST_CITY_3_5.getCityId(), TEST_CITY_3_6.getCityId(),
+            TEST_CITY_3_7.getCityId(), TEST_CITY_3_8.getCityId(), TEST_CITY_3_9.getCityId(),
+            TEST_CITY_3_10.getCityId());
+
+        List<String> region4CityIds = Arrays.asList(
+            TEST_CITY_4_1.getCityId(), TEST_CITY_4_2.getCityId(), TEST_CITY_4_3.getCityId(),
+            TEST_CITY_4_4.getCityId(), TEST_CITY_4_5.getCityId(), TEST_CITY_4_6.getCityId(),
+            TEST_CITY_4_7.getCityId(), TEST_CITY_4_8.getCityId(), TEST_CITY_4_9.getCityId(),
+            TEST_CITY_4_10.getCityId());
+
+        testCityMap.put(1, region1CityIds);
+        testCityMap.put(2, region2CityIds);
+        testCityMap.put(3, region3CityIds);
+        testCityMap.put(4, region4CityIds);
+
+        return testCityMap;
+    }
 
 }
