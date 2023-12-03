@@ -48,11 +48,6 @@ public class GameService {
         return this.numPlayers;
     }
 
-
-    public int getNumPlayers() {
-        return numPlayers;
-    }
-
     /**
      * Adds one to the current turn
      * If all Players have played a turn then add one to the round
@@ -92,6 +87,11 @@ public class GameService {
 
     public int getTurn() {
         return turn;
+    }
+    public int getTotalTurns() { return totalTurns; }
+
+    public int getNumPlayers() {
+        return numPlayers;
     }
 
     public boolean isInitialized() { return isInitialized; }

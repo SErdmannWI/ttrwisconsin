@@ -25,8 +25,6 @@ public class CityServiceTest {
     @Mock
     private CityRepository cityRepository;
 
-    /**------------------------------------------------ Test Constants -----------------------------------------------*/
-
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
@@ -98,6 +96,7 @@ public class CityServiceTest {
         List<City> updatedCities = cityService.addEconomyInfoToCity(mockedCities);
 
         //THEN
+        //Split Cities into separate Lists
         List<City> region1Cities = new ArrayList<>();
         List<City> region2Cities = new ArrayList<>();
         List<City> region3Cities = new ArrayList<>();
@@ -115,17 +114,20 @@ public class CityServiceTest {
 
         //Check each region for correct and balanced product assignment.
         //------------------------------------------ Region 1 ----------------------------------------------------//
+        //Key: productId, Value: Number of occurrences determined by Collectors.counting()
         Map<String, Long> productsAssigned = region1Cities.stream()
             .collect(Collectors.groupingBy(City::getProductId, Collectors.counting()));
 
         boolean allProductsAssigned = ProductConstants.REGION_ONE_PRODUCTS_IDS.containsAll(productsAssigned.keySet());
 
+        //Save any incorrect products assigned
         String incorrectProductsInfo = productsAssigned.keySet().stream()
             .filter(productId -> !ProductConstants.REGION_ONE_PRODUCTS_IDS.contains(productId))
             .collect(Collectors.joining(", "));
 
         Assertions.assertTrue(allProductsAssigned, "City in Region 1 has incorrect product: " + incorrectProductsInfo);
 
+        //There should be exactly 2 products assigned 3 times and 1 product assigned 4 times
         long countOfThreeAssignments = productsAssigned.values().stream().filter(count -> count == 3).count();
         long countOfFourAssignments = productsAssigned.values().stream().filter(count -> count == 4).count();
 
@@ -134,135 +136,81 @@ public class CityServiceTest {
         Assertions.assertEquals(1, countOfFourAssignments, "There should be exactly 1 product assigned 4 times: " +
             formatProductAssignments(productsAssigned));
 
-        Map<String, Integer> map = new HashMap<>();
-        for (City city : region1Cities) {
-            if (!ProductConstants.REGION_ONE_PRODUCTS_IDS.contains(city.getProductId())) {
-                Assertions.fail("City in Region 1 has incorrect product: " + city.getProductId());
-            }
-            if (!map.containsKey(city.getProductId())) {
-                map.put(city.getProductId(), 1);
-            } else {
-                map.put(city.getProductId(), map.get(city.getProductId()) + 1);
-            }
-        }
-
-        if (map.values().size() > 3) {
-            Assertions.fail("More than three products were assigned in Region 1: " + map.keySet()
-            + "\n" + map.values());
-        }
-
-        int regionOneThreeAssignments = 0;
-        int regionOneFourAssignments = 0;
-        for (Integer assignment : map.values()) {
-            if (assignment == 3) {
-                regionOneThreeAssignments ++;
-            } else if (assignment == 4) {
-                regionOneFourAssignments ++;
-            }
-        }
-
-        Assertions.assertTrue(regionOneThreeAssignments == 2 && regionOneFourAssignments == 1,
-            "Region 1's products should be assigned evenly(3, 3 and 4 times)." + "\nProduct Assignments: "
-        + map.keySet() + "\n" + map.values());
-
         //------------------------------------------ Region 2 ----------------------------------------------------//
-        map = new HashMap<>();
-        for (City city : region2Cities) {
-            if (!ProductConstants.REGION_TWO_PRODUCTS_IDS.contains(city.getProductId())) {
-                Assertions.fail("City in Region 2 has incorrect product: " + city.getProductId());
-            }
-            if (!map.containsKey(city.getProductId())) {
-                map.put(city.getProductId(), 1);
-            } else {
-                map.put(city.getProductId(), map.get(city.getProductId()) + 1);
-            }
-        }
+        //Key: productId, Value: Number of occurrences determined by Collectors.counting()
+        productsAssigned = region2Cities.stream()
+            .collect(Collectors.groupingBy(City::getProductId, Collectors.counting()));
 
-        if (map.values().size() > 3) {
-            Assertions.fail("More than three products were assigned in Region 2: " + map.keySet()
-                + "\n" + map.values());
-        }
+        allProductsAssigned = ProductConstants.REGION_TWO_PRODUCTS_IDS.containsAll(productsAssigned.keySet());
 
-        int regionTwoThreeAssignments = 0;
-        int regionTwoFourAssignments = 0;
-        for (Integer assignment : map.values()) {
-            if (assignment == 3) {
-                regionTwoThreeAssignments ++;
-            } else if (assignment == 4) {
-                regionTwoFourAssignments ++;
-            }
-        }
+        //Save any incorrect products assigned
+        incorrectProductsInfo = productsAssigned.keySet().stream()
+            .filter(productId -> !ProductConstants.REGION_TWO_PRODUCTS_IDS.contains(productId))
+            .collect(Collectors.joining(", "));
 
-        Assertions.assertTrue(regionTwoThreeAssignments == 2 && regionTwoFourAssignments == 1,
-            "Region Two's products should be assigned evenly(3, 3 and 4 times)." + "\nProduct Assignments: "
-                + map.keySet() + "\n" + map.values());
+        Assertions.assertTrue(allProductsAssigned, "City in Region 2 has incorrect product: " + incorrectProductsInfo);
+
+        //There should be exactly 2 products assigned 3 times and 1 product assigned 4 times
+        countOfThreeAssignments = productsAssigned.values().stream().filter(count -> count == 3).count();
+        countOfFourAssignments = productsAssigned.values().stream().filter(count -> count == 4).count();
+
+        Assertions.assertEquals(2, countOfThreeAssignments, "There should be exactly 2 products assigned 3 times: " +
+            formatProductAssignments(productsAssigned));
+        Assertions.assertEquals(1, countOfFourAssignments, "There should be exactly 1 product assigned 4 times: " +
+            formatProductAssignments(productsAssigned));
 
         //------------------------------------------ Region 3 ----------------------------------------------------//
-        map = new HashMap<>();
-        for (City city : region3Cities) {
-            if (!ProductConstants.REGION_THREE_PRODUCTS_IDS.contains(city.getProductId())) {
-                Assertions.fail("City in Region 3 has incorrect product: " + city.getProductId());
-            }
-            if (!map.containsKey(city.getProductId())) {
-                map.put(city.getProductId(), 1);
-            } else {
-                map.put(city.getProductId(), map.get(city.getProductId()) + 1);
-            }
-        }
+        //Key: productId, Value: Number of occurrences determined by Collectors.counting()
+        productsAssigned = region3Cities.stream()
+            .collect(Collectors.groupingBy(City::getProductId, Collectors.counting()));
 
-        if (map.values().size() > 3) {
-            Assertions.fail("More than three products were assigned in Region 3: " + map.keySet()
-                + "\n" + map.values());
-        }
+        allProductsAssigned = ProductConstants.REGION_THREE_PRODUCTS_IDS.containsAll(productsAssigned.keySet());
 
-        int regionThreeThreeAssignments = 0;
-        int regionThreeFourAssignments = 0;
-        for (Integer assignment : map.values()) {
-            if (assignment == 3) {
-                regionThreeThreeAssignments ++;
-            } else if (assignment == 4) {
-                regionThreeFourAssignments ++;
-            }
-        }
+        //Save any incorrect products assigned
+        incorrectProductsInfo = productsAssigned.keySet().stream()
+            .filter(productId -> !ProductConstants.REGION_THREE_PRODUCTS_IDS.contains(productId))
+            .collect(Collectors.joining(", "));
 
-        Assertions.assertTrue(regionThreeThreeAssignments == 2 && regionThreeFourAssignments == 1,
-            "Region 3's products should be assigned evenly(3, 3 and 4 times)." + "\nProduct Assignments: "
-                + map.keySet() + "\n" + map.values());
+        Assertions.assertTrue(allProductsAssigned, "City in Region 3 has incorrect product: " + incorrectProductsInfo);
+
+        //There should be exactly 2 products assigned 3 times and 1 product assigned 4 times
+        countOfThreeAssignments = productsAssigned.values().stream().filter(count -> count == 3).count();
+        countOfFourAssignments = productsAssigned.values().stream().filter(count -> count == 4).count();
+
+        Assertions.assertEquals(2, countOfThreeAssignments, "There should be exactly 2 products assigned 3 times: " +
+            formatProductAssignments(productsAssigned));
+        Assertions.assertEquals(1, countOfFourAssignments, "There should be exactly 1 product assigned 4 times: " +
+            formatProductAssignments(productsAssigned));
 
         //------------------------------------------ Region 4 ----------------------------------------------------//
-        map = new HashMap<>();
-        for (City city : region4Cities) {
-            if (!ProductConstants.REGION_FOUR_PRODUCTS_IDS.contains(city.getProductId())) {
-                fail("City in Region 4 has incorrect product: " + city.getProductId());
-            }
-            if (!map.containsKey(city.getProductId())) {
-                map.put(city.getProductId(), 1);
-            } else {
-                map.put(city.getProductId(), map.get(city.getProductId()) + 1);
-            }
-        }
+        //Key: productId, Value: Number of occurrences determined by Collectors.counting()
+        productsAssigned = region4Cities.stream()
+            .collect(Collectors.groupingBy(City::getProductId, Collectors.counting()));
 
-        if (map.values().size() > 3) {
-            Assertions.fail("More than three products were assigned in Region 4: " + map.keySet()
-                + "\n" + map.values());
-        }
+        allProductsAssigned = ProductConstants.REGION_FOUR_PRODUCTS_IDS.containsAll(productsAssigned.keySet());
 
-        int regionFourThreeAssignments = 0;
-        int regionFourFourAssignments = 0;
-        for (Integer assignment : map.values()) {
-            if (assignment == 3) {
-                regionFourThreeAssignments ++;
-            } else if (assignment == 4) {
-                regionFourFourAssignments ++;
-            }
-        }
+        //Save any incorrect products assigned
+        incorrectProductsInfo = productsAssigned.keySet().stream()
+            .filter(productId -> !ProductConstants.REGION_FOUR_PRODUCTS_IDS.contains(productId))
+            .collect(Collectors.joining(", "));
 
-        Assertions.assertTrue(regionFourThreeAssignments == 2 && regionFourFourAssignments == 1,
-            "Region 4's products should be assigned evenly(3, 3 and 4 times)." + "\nProduct Assignments: "
-                + map.keySet() + "\n" + map.values());
+        Assertions.assertTrue(allProductsAssigned, "City in Region 4 has incorrect product: " + incorrectProductsInfo);
+
+        //There should be exactly 2 products assigned 3 times and 1 product assigned 4 times
+        countOfThreeAssignments = productsAssigned.values().stream().filter(count -> count == 3).count();
+        countOfFourAssignments = productsAssigned.values().stream().filter(count -> count == 4).count();
+
+        Assertions.assertEquals(2, countOfThreeAssignments, "There should be exactly 2 products assigned 3 times: " +
+            formatProductAssignments(productsAssigned));
+        Assertions.assertEquals(1, countOfFourAssignments, "There should be exactly 1 product assigned 4 times: " +
+            formatProductAssignments(productsAssigned));
     }
 
     /**--------------------------------------------- Utility Methods -------------------------------------------------*/
+    /**
+     * @param assignments
+     * @return Formats Map of productIds and times assigned into a String for Assertion messages
+     */
     private String formatProductAssignments(Map<String, Long> assignments) {
         return assignments.entrySet().stream()
             .map(entry -> entry.getKey() + ": " + entry.getValue() + " times")
