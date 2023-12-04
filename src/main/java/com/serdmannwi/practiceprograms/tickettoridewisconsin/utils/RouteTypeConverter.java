@@ -1,6 +1,6 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.utils;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.RouteType;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.route.RouteType;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

@@ -1,16 +1,12 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.listener;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.CityConstants;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.CityRepository;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city.City;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Component
 public class CityDataInitializer implements ApplicationListener<ContextRefreshedEvent> {

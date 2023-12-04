@@ -4,7 +4,7 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.Ci
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.city.CityInitializationException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.city.CityNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city.City;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.CityService;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.FreightContract;
 import org.springframework.http.HttpStatus;

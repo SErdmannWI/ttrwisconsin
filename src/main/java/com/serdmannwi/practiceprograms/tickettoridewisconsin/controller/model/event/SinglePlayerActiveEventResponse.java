@@ -1,7 +1,6 @@
-package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model;
+package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.EventCondition;
 import jakarta.validation.constraints.NotNull;
 
 public class SinglePlayerActiveEventResponse {
@@ -14,9 +13,6 @@ public class SinglePlayerActiveEventResponse {
     @NotNull
     @JsonProperty("cardDescription")
     private String cardDescription;
-    @NotNull
-    @JsonProperty("eventCondition")
-    private EventCondition eventCondition;
 
     public void setName(String name) {
         this.name = name;
@@ -28,9 +24,5 @@ public class SinglePlayerActiveEventResponse {
 
     public void setCardDescription(String cardDescription) {
         this.cardDescription = cardDescription;
-    }
-
-    public void setEventCondition(EventCondition eventCondition) {
-        this.eventCondition = eventCondition;
     }
 }

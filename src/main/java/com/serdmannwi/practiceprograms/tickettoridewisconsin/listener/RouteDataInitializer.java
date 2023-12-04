@@ -1,10 +1,10 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.listener;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.CityConstants;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.Route;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.RouteColor;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.RouteRepository;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.RouteType;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.route.Route;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.route.RouteColor;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.route.RouteRepository;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.route.RouteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

@@ -2,16 +2,13 @@ package com.serdmannwi.practiceprograms.tickettoridewisconsin.service;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.CityConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.ProductConstants;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.CityRepository;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city.City;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city.CityRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.*;

@@ -1,6 +1,5 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.service;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.AbilityConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.CityConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.FreightStationConstants;
@@ -10,17 +9,15 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.A
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.MaxPlayersException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.NoAvailableFreightStationException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.PlayerNotFoundException;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRepository;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.player.PlayerRecord;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.player.PlayerRepository;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.Ability;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;

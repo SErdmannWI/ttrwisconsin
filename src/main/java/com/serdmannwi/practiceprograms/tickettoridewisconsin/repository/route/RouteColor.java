@@ -1,4 +1,4 @@
-package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
+package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.route;
 
 public enum RouteColor {
     BLUE("blue"),

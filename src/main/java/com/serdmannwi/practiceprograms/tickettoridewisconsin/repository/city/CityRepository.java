@@ -1,4 +1,4 @@
-package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
+package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

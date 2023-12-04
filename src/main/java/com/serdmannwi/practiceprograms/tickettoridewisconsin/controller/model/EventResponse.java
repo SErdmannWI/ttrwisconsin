@@ -1,9 +1,7 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.EventCondition;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.EventType;
-import jakarta.persistence.Id;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.EventType;
 import jakarta.validation.constraints.NotNull;
 
 public class EventResponse {
@@ -40,10 +38,6 @@ public class EventResponse {
     @NotNull
     @JsonProperty("eventDuration")
     private int eventDuration;
-
-    @NotNull
-    @JsonProperty("eventCondition")
-    private EventCondition eventCondition;
 
     public void setName(String name) {
         this.name = name;
@@ -87,9 +81,5 @@ public class EventResponse {
 
     public void setEventDuration(int eventDuration) {
         this.eventDuration = eventDuration;
-    }
-
-    public void setEventCondition(EventCondition eventCondition) {
-        this.eventCondition = eventCondition;
     }
 }

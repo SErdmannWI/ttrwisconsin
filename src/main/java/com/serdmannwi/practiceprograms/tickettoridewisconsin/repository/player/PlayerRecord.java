@@ -1,4 +1,4 @@
-package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
+package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.player;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

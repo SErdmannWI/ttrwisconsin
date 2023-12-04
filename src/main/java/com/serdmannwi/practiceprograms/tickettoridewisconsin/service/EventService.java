@@ -1,7 +1,7 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.service;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.Event;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.EventRepository;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.Event;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class EventService {
 
     private final EventRepository eventRepository; // Master Repository for all Events in game. Use for creating initial "deck"
     private Deque<Event> eventDeck; //Simulated Deck of Event cards
-    private Map<String, List<Event>> playerFinishedEvents; //Key playerID, value List of Events that a Player has "completed"
+    private Map<String, List<Event>> finishedEvents; //Key playerID, value List of Events that a Player has "completed"
 
     @Autowired
     public EventService(EventRepository eventRepository) {
@@ -22,19 +22,22 @@ public class EventService {
         eventDeck = new ArrayDeque<>();
     }
 
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
-    }
-
+    /**
+     * Creates shuffled simulated deck of Event cards
+     */
     public void createDeck() {
         List<Event> allEvents = eventRepository.findAll();
         Collections.shuffle(allEvents);
         eventDeck.addAll(allEvents);
     }
 
-    public void createPlayerEventMap(String[] playerIds) {
+    /**
+     * Creates a map to be used for storing finished Events for each Player
+     * @param playerIds
+     */
+    public void createFinishedEventMap(String[] playerIds) {
         for (String id : playerIds) {
-            playerFinishedEvents.put(id, new ArrayList<>());
+            finishedEvents.put(id, new ArrayList<>());
         }
     }
 
@@ -49,8 +52,13 @@ public class EventService {
         return currentEvent;
     }
 
+    /**
+     * Adds the given event to the finished Events Map
+     * @param playerId
+     * @param event
+     */
     public void addFinishedEventToPlayer(String playerId, Event event) {
-        playerFinishedEvents.get(playerId).add(event);
+        finishedEvents.get(playerId).add(event);
     }
 
     public List<Event> getAllActiveEvents() {
@@ -92,5 +100,9 @@ public class EventService {
      */
     public List<Event> incrementEventTimer() {
         return new ArrayList<>();
+    }
+
+    public List<Event> getAllEvents() {
+        return eventRepository.findAll();
     }
 }

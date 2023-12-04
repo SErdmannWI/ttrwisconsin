@@ -1,6 +1,6 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.utils;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.EventType;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.EventType;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

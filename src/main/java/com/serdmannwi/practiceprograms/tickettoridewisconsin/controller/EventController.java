@@ -1,9 +1,7 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.EventResponse;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.SinglePlayerActiveEventResponse;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.Event;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.SinglePlayerActiveEvent;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.Event;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.EventService;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -61,7 +59,7 @@ public class EventController {
 
     @PutMapping("/createEventMap")
     public ResponseEntity<String> createEventMap(String[] playerIds) {
-        eventService.createPlayerEventMap(playerIds);
+        eventService.createFinishedEventMap(playerIds);
 
         return ResponseEntity.ok().body("Created Event Map");
     }

@@ -6,7 +6,7 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.A
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.MaxPlayersException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.NoAvailableFreightStationException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.PlayerNotFoundException;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.player.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

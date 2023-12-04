@@ -1,11 +1,11 @@
-package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
+package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.EventConstants;
 import jakarta.persistence.*;
 
 @Entity
 @DiscriminatorValue(EventConstants.SINGLE_PLAYER_ACTIVE_EVENT)
-public class SinglePlayerActiveEvent extends Event{
+public class SinglePlayerActiveEvent extends Event {
     private String playerId;
     @OneToOne(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private EventCondition eventCondition;
@@ -15,7 +15,8 @@ public class SinglePlayerActiveEvent extends Event{
 
     public SinglePlayerActiveEvent(String name, String eventId, String cardDescription, String actionId,
                                    EventCondition eventCondition){
-        super(name, eventId, cardDescription);
+        super(eventCondition.getConditionId(), eventCondition.getConditionDescription(), eventCondition.getEffectId(),
+            name, eventId, cardDescription);
         this.actionId = actionId;
         this.playerId = "";
         this.eventCondition = eventCondition;

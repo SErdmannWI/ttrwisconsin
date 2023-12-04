@@ -1,4 +1,4 @@
-package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
+package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.utils.JsonUtil;
 import jakarta.persistence.Entity;

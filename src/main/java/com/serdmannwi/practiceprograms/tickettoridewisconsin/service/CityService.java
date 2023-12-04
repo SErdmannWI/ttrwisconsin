@@ -5,8 +5,8 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.GameConst
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.ProductConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.city.CityInitializationException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.city.CityNotFoundException;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.CityRepository;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city.City;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city.CityRepository;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.FreightContract;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

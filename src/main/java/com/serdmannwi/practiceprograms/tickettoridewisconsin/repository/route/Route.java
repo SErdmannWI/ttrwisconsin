@@ -1,4 +1,4 @@
-package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
+package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.route;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

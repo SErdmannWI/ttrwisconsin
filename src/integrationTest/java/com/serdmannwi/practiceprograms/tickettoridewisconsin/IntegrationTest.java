@@ -18,9 +18,6 @@ import java.lang.annotation.Target;
 @AutoConfigureMockMvc
 @AutoConfigureJson
 @AutoConfigureJsonTesters
-//@TestPropertySource(properties = {
-//    "spring.datasource.url=jdbc:tc:mysql:5.7:///testdb",
-//    "spring.datasource.driver-class-name=org.testcontainers.jdbc.ContainerDatabaseDriver"
-//})
+
 public @interface IntegrationTest {
 }

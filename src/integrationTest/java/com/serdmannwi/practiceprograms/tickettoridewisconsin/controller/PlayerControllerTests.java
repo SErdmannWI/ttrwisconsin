@@ -1,6 +1,5 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.jsonpath.JsonPath;
@@ -10,17 +9,14 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.CityConst
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.FreightStationConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.PlayerConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.*;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.PlayerRecord;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.player.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.PlayerService;
-import net.bytebuddy.utility.dispatcher.JavaDispatcher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -40,8 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
+//Overrides Spring properties to set up  Environment for test
 @TestPropertySource(properties = {
     "spring.datasource.url=${mySQLContainer.getJdbcUrl()}",
     "spring.datasource.username=${mySQLContainer.getUsername()}",
@@ -59,6 +55,7 @@ public class PlayerControllerTests {
     private PlayerService playerService;
     private ObjectMapper mapper;
 
+    //Create MySQL Container Docker image
     @Container
     public static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.0")
         .withExposedPorts(3306)
@@ -66,6 +63,7 @@ public class PlayerControllerTests {
         .withUsername("test")
         .withPassword("test");
 
+    //Registers properties, sets datasource to test container
     @DynamicPropertySource
     static void databaseProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);

@@ -1,6 +1,6 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.constants;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.City;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city.City;
 
 import java.util.*;
 

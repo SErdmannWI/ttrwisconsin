@@ -1,4 +1,4 @@
-package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository;
+package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event;
 
 public enum EventType {
     SINGLEPLAYER_IMMEDIATE("singlePlayerImmediate"),

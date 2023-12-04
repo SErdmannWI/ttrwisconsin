@@ -1,13 +1,10 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.constants;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.EventCondition;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.SinglePlayerActiveEvent;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.SinglePlayerPassiveEvent;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.ConditionDetermination;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.Event;
 
 public class EventConstants {
-    /**
-     * --------------------------------------------------- Names ---------------------------------------------------
-     **/
+    /**--------------------------------------------------- Names -----------------------------------------------------*/
     public static final String BAILOUT_NAME = "Government Bailout";
     public static final String DERAILMENT_NAME = "Derailment!";
 
@@ -21,9 +18,7 @@ public class EventConstants {
     public static final String MULTI_PLAYER_ACTIVE_EVENT = "Multi Player Active";
     public static final String MULTI_PLAYER_TIMED_EVENT = "Multi Player Timed";
 
-    /**
-     * ---------------------------------------------------- IDs ----------------------------------------------------
-     **/
+    /**---------------------------------------------------- IDs ------------------------------------------------------*/
     public static final String BAILOUT_ID = "EVENT01";
     public static final String DERAILMENT_ID = "EVENT02";
 
@@ -37,9 +32,14 @@ public class EventConstants {
         " must now pay a fine of one locomotive card or else you will not receive any points from Freight Contracts" +
         " until your next turn.";
 
-    /**-------------------------------------------------- Events ---------------------------------------------------**/
+    /**----------------------------------------------- Condition IDs ------------------------------------------------**/
+    public static final String BAILOUT_CONDITION_ID = "EVENTCON01";
 
+    /**------------------------------------------ Condition Descriptions --------------------------------------------**/
+    public static final String BAILOUT_CONDITION_DESCRIPTION = "There is only 1 Player with the lowest score";
 
-    /**------------------------------------------------ Conditions -------------------------------------------------**/
+    /**------------------------------------------------ Condition ---------------------------------------------------**/
+    public static final Event.EventCondition BAILOUT_CONDITION = new Event.EventCondition(BAILOUT_CONDITION_ID,
+        BAILOUT_CONDITION_DESCRIPTION, EffectConstants.BAILOUT_EFFECT_ID, ConditionDetermination.PLAYER_WITH_LOWEST_SCORE);
 
 }
