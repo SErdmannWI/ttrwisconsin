@@ -11,8 +11,8 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.N
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.PlayerNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.player.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.player.PlayerRepository;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.Ability;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.FreightStation;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.model.Ability;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.model.FreightStation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -2,11 +2,10 @@ package com.serdmannwi.practiceprograms.tickettoridewisconsin.service;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.TestRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.TestRepository;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.TestModel;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.model.TestModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

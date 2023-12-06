@@ -1,7 +1,9 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.listener;
 
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.ActionConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.EventConstants;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.EventRepository;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.SinglePlayerActiveEvent;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.SinglePlayerPassiveEvent;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class EventDataInitializer implements ApplicationListener<ContextRefreshe
         SinglePlayerPassiveEvent bailoutEvent = new SinglePlayerPassiveEvent(EventConstants.BAILOUT_NAME,
             EventConstants.BAILOUT_ID, EventConstants.BAILOUT_DESC, EventConstants.BAILOUT_CONDITION);
         eventRepository.save(bailoutEvent);
+        SinglePlayerActiveEvent derailmentEvent = new SinglePlayerActiveEvent(EventConstants.DERAILMENT_NAME,
+            EventConstants.DERAILMENT_ID, EventConstants.DERAILMENT_DESC, EventConstants.DERAILMENT_CONDITION);
+        eventRepository.save(derailmentEvent);
     }
 
 

@@ -11,7 +11,7 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.N
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.player.PlayerNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.player.PlayerRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.player.PlayerRepository;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.Ability;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.model.Ability;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

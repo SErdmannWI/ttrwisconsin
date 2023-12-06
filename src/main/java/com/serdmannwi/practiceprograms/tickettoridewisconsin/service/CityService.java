@@ -7,7 +7,7 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.city.Cit
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.exceptions.city.CityNotFoundException;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city.City;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.city.CityRepository;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.FreightContract;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.model.FreightContract;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event;
 
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.eventcondition.EventCondition;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -19,22 +20,17 @@ public class Event {
     private String cardDescription;
     private boolean isActive;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "event_condition_id", referencedColumnName = "conditionId")
+    @JoinColumn(name = "conditionId")
     private EventCondition eventCondition;
 
     public Event() {}
 
-    public Event(String conditionId, String conditionDescription, String effectId, String name, String eventId,
-                 String cardDescription) {
-        eventCondition = new EventCondition();
-        eventCondition.setConditionId(conditionId);
-        eventCondition.setConditionDescription(conditionDescription);
-        eventCondition.setEffectId(effectId);
-        eventCondition.setConditionMet(false);
+    public Event(String name, String eventId, String cardDescription, EventCondition eventCondition) {;
         this.name = name;
         this.eventId = eventId;
         this.cardDescription = cardDescription;
         this.isActive = false;
+        this.eventCondition = eventCondition;
     }
 
     public String getName() {
@@ -65,75 +61,11 @@ public class Event {
 
     public void setActive(boolean isActive) { this.isActive = isActive; }
 
-    @Entity
-    @Table(name = "event_condition")
-    public static class EventCondition {
-        @Id
-        private String conditionId;
-        private String conditionDescription;
-        private String effectId;
-        private List<String> playersEffected;
-        @Enumerated(EnumType.STRING)
-        private ConditionDetermination conditionDetermination;
-        private boolean conditionMet;
+    public EventCondition getEventCondition() {
+        return eventCondition;
+    }
 
-        public EventCondition() {}
-
-        public EventCondition(String conditionId, String conditionDescription, String effectId, ConditionDetermination determination) {
-            this.conditionId = conditionId;
-            this.conditionDescription = conditionDescription;
-            this.effectId = effectId;
-            playersEffected = new ArrayList<>();
-            this.conditionDetermination = determination;
-            this.conditionMet = false;
-        }
-
-        public String getConditionId() {
-            return conditionId;
-        }
-
-        public void setConditionId(String conditionId) {
-            this.conditionId = conditionId;
-        }
-
-        public String getConditionDescription() {
-            return conditionDescription;
-        }
-
-        public void setConditionDescription(String conditionDescription) {
-            this.conditionDescription = conditionDescription;
-        }
-
-        public String getEffectId() {
-            return effectId;
-        }
-
-        public void setEffectId(String effectId) {
-            this.effectId = effectId;
-        }
-
-        public boolean isConditionMet() {
-            return conditionMet;
-        }
-
-        public List<String> getPlayersEffected() {
-            return playersEffected;
-        }
-
-        public void setPlayersEffected(List<String> playersEffected) {
-            this.playersEffected = playersEffected;
-        }
-
-        public ConditionDetermination getConditionDetermination() {
-            return conditionDetermination;
-        }
-
-        public void setConditionDetermination(ConditionDetermination conditionDetermination) {
-            this.conditionDetermination = conditionDetermination;
-        }
-
-        public void setConditionMet(boolean conditionMet) {
-            this.conditionMet = conditionMet;
-        }
+    public void setEventCondition(EventCondition eventCondition) {
+        this.eventCondition = eventCondition;
     }
 }

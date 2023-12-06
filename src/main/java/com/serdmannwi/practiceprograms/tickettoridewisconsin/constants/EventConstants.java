@@ -1,7 +1,7 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.constants;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.ConditionDetermination;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event.Event;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.eventcondition.EventCondition;
 
 public class EventConstants {
     /**--------------------------------------------------- Names -----------------------------------------------------*/
@@ -33,13 +33,17 @@ public class EventConstants {
         " until your next turn.";
 
     /**----------------------------------------------- Condition IDs ------------------------------------------------**/
-    public static final String BAILOUT_CONDITION_ID = "EVENTCON01";
+    public static final String BAILOUT_CONDITION_ID = "EventCondition01";
+    public static final String DERAILMENT_CONDITION_ID = "EventCondition02";
 
     /**------------------------------------------ Condition Descriptions --------------------------------------------**/
     public static final String BAILOUT_CONDITION_DESCRIPTION = "There is only 1 Player with the lowest score";
+    public static final String DERAILMENT_CONDITION_DESCRIPTION = "Current Player has given up 1 locomotive card";
 
     /**------------------------------------------------ Condition ---------------------------------------------------**/
-    public static final Event.EventCondition BAILOUT_CONDITION = new Event.EventCondition(BAILOUT_CONDITION_ID,
+    public static final EventCondition BAILOUT_CONDITION = new EventCondition(BAILOUT_CONDITION_ID,
         BAILOUT_CONDITION_DESCRIPTION, EffectConstants.BAILOUT_EFFECT_ID, ConditionDetermination.PLAYER_WITH_LOWEST_SCORE);
+    public static final EventCondition DERAILMENT_CONDITION = new EventCondition(DERAILMENT_ID,
+        DERAILMENT_CONDITION_DESCRIPTION, EffectConstants.DERAILMENT_EFFECT_ID, ConditionDetermination.CURRENT_PLAYER);
 
 }

@@ -6,17 +6,18 @@ import jakarta.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="TYPE", discriminatorType = DiscriminatorType.STRING)
+@Table(name = "effect")
 public class Effect {
     private String name;
     @Id
-    private String id;
+    private String effectId;
     private String eventId;
 
     public Effect() {}
 
     public Effect(String name, String id, String eventId) {
         this.name = name;
-        this.id = id;
+        this.effectId = id;
         this.eventId = eventId;
     }
 
@@ -28,12 +29,12 @@ public class Effect {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
+    public String getEffectId() {
+        return effectId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setEffectId(String effectId) {
+        this.effectId = effectId;
     }
 
     public String getEventId() {

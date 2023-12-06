@@ -1,6 +1,6 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.constants;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.Ability;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.model.Ability;
 
 import java.util.HashMap;
 import java.util.Map;

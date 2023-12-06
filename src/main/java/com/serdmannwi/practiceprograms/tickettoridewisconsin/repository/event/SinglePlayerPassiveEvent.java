@@ -1,6 +1,7 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.event;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.constants.EventConstants;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.eventcondition.EventCondition;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
@@ -10,7 +11,7 @@ import jakarta.persistence.Entity;
  * Each Event needs:
  * String name, eventID, description
  * EventCondition (String id, description, effectId, ConditionDetermination(tells the game how to pick the Player)
- * A PassiveEffect will also be needed (String name, id, this Event's ID, effectInstruction)
+ * PassiveEffect (String name, id, this Event's ID, effectInstruction)
  */
 
 @Entity
@@ -21,8 +22,7 @@ public class SinglePlayerPassiveEvent extends Event {
     public SinglePlayerPassiveEvent() {}
 
     public SinglePlayerPassiveEvent(String name, String eventId, String cardDescription, EventCondition eventCondition) {
-        super(eventCondition.getConditionId(), eventCondition.getConditionDescription(), eventCondition.getEffectId(),
-            name, eventId, cardDescription);
+        super(name, eventId, cardDescription, eventCondition);
         this.playerId = "";
     }
 

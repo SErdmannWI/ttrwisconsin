@@ -2,9 +2,13 @@ package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.effect;
 
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.utils.JsonUtil;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 import java.util.List;
 
+@Entity
+@DiscriminatorValue("Active")
 public class ActiveEffect extends Effect {
     @Column(columnDefinition = "TEXT")
     private String conditionIdsJson;

@@ -4,7 +4,7 @@ import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.Te
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.controller.model.TestResponse;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.TestRecord;
 import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.TestService;
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.TestModel;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.model.TestModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

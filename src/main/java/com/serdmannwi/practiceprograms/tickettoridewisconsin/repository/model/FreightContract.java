@@ -1,4 +1,4 @@
-package com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model;
+package com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.model;
 
 public class FreightContract {
     private String productId;

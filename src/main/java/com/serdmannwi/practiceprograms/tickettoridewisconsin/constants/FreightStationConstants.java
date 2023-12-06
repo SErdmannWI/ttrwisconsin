@@ -1,6 +1,6 @@
 package com.serdmannwi.practiceprograms.tickettoridewisconsin.constants;
 
-import com.serdmannwi.practiceprograms.tickettoridewisconsin.service.model.FreightStation;
+import com.serdmannwi.practiceprograms.tickettoridewisconsin.repository.model.FreightStation;
 
 import java.util.HashMap;
 import java.util.Map;

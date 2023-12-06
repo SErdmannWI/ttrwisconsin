@@ -47,4 +47,8 @@ public class ProductConstants {
     //Northern Wisconsin
     public static final List<String> REGION_FOUR_PRODUCTS_IDS = new ArrayList<>(Arrays.asList(PRODUCT_FORESTRY_ID,
         PRODUCT_MAPLE_SYRUP_ID, PRODUCT_WILD_RICE_ID));
+    //All Products
+    public static final List<String> ALL_PRODUCTS = new ArrayList<>(Arrays.asList(PRODUCT_BEER_ID, PRODUCT_CHEESE_ID,
+        PRODUCT_CORN_ID, PRODUCT_CRANBERRIES_ID, PRODUCT_FORESTRY_ID, PRODUCT_MAPLE_SYRUP_ID, PRODUCT_MACHINERY_ID,
+        PRODUCT_MILK_ID, PRODUCT_PAPER_ID, PRODUCT_SAND_ID, PRODUCT_SAUSAGE_ID, PRODUCT_WILD_RICE_ID));
 }
