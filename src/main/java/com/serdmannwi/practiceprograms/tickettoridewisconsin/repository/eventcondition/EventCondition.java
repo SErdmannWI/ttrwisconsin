@@ -18,6 +18,8 @@ public class EventCondition {
     @Enumerated(EnumType.STRING)
     private ConditionDetermination conditionDetermination;
     private boolean conditionMet;
+    @OneToOne
+    private Effect effect;
 
     public EventCondition() {}
 

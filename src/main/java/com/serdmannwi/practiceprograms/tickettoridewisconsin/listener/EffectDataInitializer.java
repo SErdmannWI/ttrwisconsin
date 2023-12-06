@@ -17,6 +17,7 @@ public class EffectDataInitializer implements ApplicationListener<ContextRefresh
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (effectRepository.count() == 0) {
             effectRepository.save(EffectConstants.BAILOUT_EFFECT);
+            effectRepository.save(EffectConstants.DERAILMENT_EFFECT);
         }
     }
 }

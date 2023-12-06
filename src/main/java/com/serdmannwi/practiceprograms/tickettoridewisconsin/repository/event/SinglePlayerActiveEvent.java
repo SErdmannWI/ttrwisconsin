@@ -16,15 +16,12 @@ import jakarta.persistence.*;
 @DiscriminatorValue(EventConstants.SINGLE_PLAYER_ACTIVE_EVENT)
 public class SinglePlayerActiveEvent extends Event {
     private String playerId;
-    @OneToOne(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private EventCondition eventCondition;
 
     public SinglePlayerActiveEvent() {}
 
     public SinglePlayerActiveEvent(String name, String eventId, String cardDescription, EventCondition eventCondition){
         super(name, eventId, cardDescription, eventCondition);
         this.playerId = "";
-        this.eventCondition = eventCondition;
     }
 
     public String getPlayerId() {
@@ -35,19 +32,10 @@ public class SinglePlayerActiveEvent extends Event {
         this.playerId = playerId;
     }
 
-    public EventCondition getEventCondition() {
-        return eventCondition;
-    }
-
-    public void setEventCondition(EventCondition eventCondition) {
-        this.eventCondition = eventCondition;
-    }
-
     @Override
     public String toString() {
         return "SinglePlayerActiveEvent{" +
             "playerId='" + playerId + '\'' +
-            ", eventCondition=" + eventCondition +
             '}';
     }
 }
